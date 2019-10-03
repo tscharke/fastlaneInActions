@@ -17,12 +17,16 @@ So this repository is heavily under constructions (**work in progress**)!
 
 # Start
 
+## iOS
+
 To start the React-Native-App on your local machine do…
 
 1. Open your terminal
 2. Switch to you project-folder
 3. Go to your _ios_-folder 👉 `cd ios`
-4. Install Cocoapods by running `pod install`
-5. Go back to your project-folder 👉`cd ..`
+4. (Optional) Install Cocoapods by running `pod install`
+5. (Optional) Go back to your project-folder 👉`cd ..`
 6. Run the App with `yarn app:ios` or open [./ios/MyAwesomeProject.xcodeproj](ios/MyAwesomeProject.xcodeproj) with Xcode.
 7. 🎉🎉🎉
+
+**Note**: The steps 4 and 5 are optional and needed only the very first time.
