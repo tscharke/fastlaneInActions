@@ -5,9 +5,10 @@
   "author": "Thomas Scharke",
   "scripts": {
     "app:android": "react-native run-android",
-    "app:ios": "react-native run-ios",
     "start": "react-native start",
-    "test": "jest"
+    "test": "jest",
+    "ios:app": "react-native run-ios",
+    "ios:deploy": "fastlane ios beta --env development"
   },
   "dependencies": {
     "react": "16.9.0",

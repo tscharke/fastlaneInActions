@@ -1,0 +1,37 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+platform :ios do
+  private_lane :build do
+    puts "Build iOS application w/ automatic signing and create a provisioning profile."
+    gym(
+        scheme: 'MyAwesomeProject',
+        workspace: './ios/MyAwesomeProject.xcworkspace',
+        silent: false,
+        clean: true,
+        configuration: 'Development',
+        output_directory: './fastlane/builds/',
+        output_name: 'MyAwesomeProject.ipa',
+        xcargs: "-allowProvisioningUpdates",
+        export_options: {
+            method: "ad-hoc",
+        }
+      )
+  end
+
+  lane :beta do
+    build
+  end
+end
