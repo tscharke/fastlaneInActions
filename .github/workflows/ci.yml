@@ -15,7 +15,10 @@ jobs:
       - name: update-yarn
         uses: taichi/actions-package-update@master
         env:
+          AUTHOR_EMAIL: john@example.com
+          AUTHOR_NAME: John
           EXECUTE: "true"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           UPDATE_COMMAND: yarn
         with:
           args: upgrade --latest
