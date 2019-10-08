@@ -35,6 +35,6 @@ jobs:
           ruby --version
           fastlane --version
           yarn install
-          yarn ios:deploy
+          fastlane ios beta --env development
         env:
           CI: true
