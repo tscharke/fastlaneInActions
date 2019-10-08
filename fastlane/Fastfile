@@ -16,7 +16,7 @@
 platform :ios do
   private_lane :build do
     puts "Build iOS application w/ automatic signing and create a provisioning profile."
-    enable_automatic_code_signing(path: "./ios/MyAwesomeProject.xcworkspace")
+    # enable_automatic_code_signing(path: "./ios/MyAwesomeProject.xcworkspace")
     gym(
         scheme: 'MyAwesomeProject',
         workspace: './ios/MyAwesomeProject.xcworkspace',
