@@ -27,15 +27,15 @@ jobs:
         run: |
           gem install fastlane -NV
       # Checkout repository
-      - uses: actions/checkout@v1
+      - name: Checkout repository
+        uses: actions/checkout@v1
       # Build and Test
-      - name: yarn install and test
+      - name: Build & Test
         run: |
-          yarn install
-          yarn test
-        env:
-          CI: true
-      # Check versions
-      - run: |
           ruby --version
           fastlane --version
+          yarn install
+          yarn test
+          yarn ios:deploy
+        env:
+          CI: true
