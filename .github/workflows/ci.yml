@@ -9,19 +9,9 @@ jobs:
     strategy:
       matrix:
         node-version: [8.x]
+        ruby-version: [ '2.4.x']
 
     steps:
-      # Update yarn to use the latest version
-      - name: update-yarn
-        uses: taichi/actions-package-update@master
-        env:
-          AUTHOR_EMAIL: john@example.com
-          AUTHOR_NAME: John
-          EXECUTE: "true"
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          UPDATE_COMMAND: yarn
-        with:
-          args: upgrade --latest
       # Setup Node
       - name: Use node in version ${{ matrix.node-version }}
         uses: actions/setup-node@v1
@@ -35,3 +25,10 @@ jobs:
           yarn test
         env:
           CI: true
+      # Setup ruby
+      - name: Setup ruby
+        uses: actions/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+        run: ruby --version
+
