@@ -26,6 +26,10 @@ jobs:
       - name: Setup Fastlane
         run: |
           gem install fastlane -NV
+      # Setup Cocoapods
+      - name: Setup Cocoapods
+        run: |
+          gem install cocoapods
       # Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v1
@@ -35,6 +39,9 @@ jobs:
           ruby --version
           fastlane --version
           yarn install
+          cd ios
+          pod install
+          cd ..
           fastlane ios beta --env development
         env:
           CI: true
