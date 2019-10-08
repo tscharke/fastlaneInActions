@@ -37,5 +37,5 @@ jobs:
           CI: true
       # Check versions
       - run: |
-        ruby --version
-        fastlane --version
+          ruby --version
+          fastlane --version
