@@ -29,6 +29,6 @@ jobs:
       - name: Setup ruby
         uses: actions/setup-ruby@v1
         with:
-          ruby-version: ${{ matrix.ruby }}
-        run: |
-          ruby --version
+          ruby-version: ${{ matrix.ruby-version }}
+#        run: |
+#          ruby --version
