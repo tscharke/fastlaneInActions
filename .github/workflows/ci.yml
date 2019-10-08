@@ -36,16 +36,9 @@ jobs:
       # Build and Test
       - name: Build & Test
         run: |
-          ruby --version
-          fastlane --version
           yarn install
           cd ios
           pod install
           cd ..
-          fastlane ios beta
-        env:
-          CI: true
-          NODE_BINARY: node
-          APP_IDENTIFIER: org.reactjs.native.example.MyAwesomeProject
-          APPLE_ID: ${{ secrets.APPLE_ID }}
-          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          fastlane env
+          fastlane run ios beta NODE_BINARY:node APP_IDENTIFIER:org.reactjs.native.example.MyAwesomeProject APPLE_ID:${{ secrets.APPLE_ID }} APPLE_TEAM_ID:${{ secrets.APPLE_TEAM_ID }}
