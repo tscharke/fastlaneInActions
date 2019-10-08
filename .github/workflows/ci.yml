@@ -12,11 +12,21 @@ jobs:
         node-version: [8.x]
 
     steps:
-    - uses: actions/checkout@v1
+      - name: update-yarn
+        uses: taichi/actions-package-update@master
+        env:
+          EXECUTE: "true"
+          UPDATE_COMMAND: yarn
+        with:
+          args: upgrade --latest
+
     - name: Use node in version ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
+
+    - uses: actions/checkout@v1
+
     - name: yarn install and test
       run: |
         yarn install
