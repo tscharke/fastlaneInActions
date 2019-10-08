@@ -1,19 +1,19 @@
-name: Node CI
+name: CI
 
 on: [push]
 
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: macOS-10.14
 
     strategy:
       matrix:
-        node-version: [macOS-10.14]
+        node-version: [8.x]
 
     steps:
     - uses: actions/checkout@v1
-    - name: Use Node.js ${{ matrix.node-version }}
+    - name: Use node in version ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
