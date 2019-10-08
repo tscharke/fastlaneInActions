@@ -34,11 +34,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v1
       # Build and Test
-      - name: Build & Test
+      - name: Build, test and deploy
         run: |
           yarn install
           cd ios
           pod install
           cd ..
-          fastlane env
-          fastlane run ios beta NODE_BINARY:node APP_IDENTIFIER:org.reactjs.native.example.MyAwesomeProject APPLE_ID:${{ secrets.APPLE_ID }} APPLE_TEAM_ID:${{ secrets.APPLE_TEAM_ID }}
+          fastlane ios beta
+        env:
+          APP_IDENTIFIER: org.reactjs.native.example.MyAwesomeProject
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
