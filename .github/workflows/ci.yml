@@ -19,14 +19,11 @@ jobs:
           UPDATE_COMMAND: yarn
         with:
           args: upgrade --latest
-
     - name: Use node in version ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-
     - uses: actions/checkout@v1
-
     - name: yarn install and test
       run: |
         yarn install
