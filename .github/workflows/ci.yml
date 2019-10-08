@@ -13,10 +13,20 @@ jobs:
 
     steps:
       # Setup Node
-      - name: Use node in version ${{ matrix.node-version }}
+      - name: Setup Node
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
+      # Setup ruby
+      - name: Setup Ruby
+        uses: actions/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby-version }}
+      # Setup fastlane
+      - name: Setup Fastlane
+        run: |
+          gem install fastlane -NV
+      # Checkout repository
       - uses: actions/checkout@v1
       # Build and Test
       - name: yarn install and test
@@ -25,9 +35,7 @@ jobs:
           yarn test
         env:
           CI: true
-      # Setup ruby
-      - name: Setup ruby
-        uses: actions/setup-ruby@v1
-        with:
-          ruby-version: ${{ matrix.ruby-version }}
-      - run: ruby --version
+      # Check versions
+      - run: |
+        ruby --version
+        fastlane --version
