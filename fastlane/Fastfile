@@ -23,13 +23,8 @@ platform :ios do
       configuration: 'Development',
       output_directory: './fastlane/builds/',
       output_name: 'MyAwesomeProject.ipa',
-      xcargs: "-allowProvisioningUpdates",
-      codesigning_identity: ENV['CODE_SIGNING_IDENTITY'],
       export_options: {
-          method: "ad-hoc",
-          provisioningProfiles: {
-              "org.reactjs.native.example.MyAwesomeProject" => ENV['CODE_SIGNING_IDENTITY']
-          }
+          method: "ad-hoc"
       }
     )
   end
