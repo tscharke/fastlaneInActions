@@ -642,7 +642,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "-";
+				PRODUCT_BUNDLE_IDENTIFIER = FastlaneInActionsApp;
 				PRODUCT_NAME = MyAwesomeProject;
 				PROVISIONING_PROFILE_SPECIFIER = "Fastlane in Actions Development";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -665,7 +665,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "-";
+				PRODUCT_BUNDLE_IDENTIFIER = FastlaneInActionsApp;
 				PRODUCT_NAME = MyAwesomeProject;
 				PROVISIONING_PROFILE_SPECIFIER = "Fastlane in Actions Development";
 				VERSIONING_SYSTEM = "apple-generic";
