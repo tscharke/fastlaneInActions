@@ -15,6 +15,10 @@
 
 platform :ios do
   private_lane :build do
+    cocoapods(
+        clean: true
+    )
+
     gym(
       scheme: 'MyAwesomeProject',
       workspace: './ios/MyAwesomeProject.xcworkspace',
