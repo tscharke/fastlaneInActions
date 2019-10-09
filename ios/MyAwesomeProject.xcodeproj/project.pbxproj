@@ -642,7 +642,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.MyAwesomeProject;
+				PRODUCT_BUNDLE_IDENTIFIER = de.dermeer.van.fastlaneInActions;
 				PRODUCT_NAME = MyAwesomeProject;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -665,7 +665,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.MyAwesomeProject;
+				PRODUCT_BUNDLE_IDENTIFIER = de.dermeer.van.fastlaneInActions;
 				PRODUCT_NAME = MyAwesomeProject;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				VERSIONING_SYSTEM = "apple-generic";
