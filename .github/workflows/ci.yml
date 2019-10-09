@@ -27,9 +27,9 @@ jobs:
         run: |
           gem install fastlane -NV
       # Setup Cocoapods
-      - name: Setup Cocoapods
-        run: |
-          gem install cocoapods
+#      - name: Setup Cocoapods
+#        run: |
+#          gem install cocoapods
       # Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v1
@@ -37,11 +37,10 @@ jobs:
       - name: Build, test and deploy
         run: |
           yarn install
-          cd ios
-          pod install
-          cd ..
+          cocoapods
           fastlane ios beta
         env:
           APP_IDENTIFIER: org.reactjs.native.example.MyAwesomeProject
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          CODE_SIGNING_IDENTITY: "iPhone Developer"
