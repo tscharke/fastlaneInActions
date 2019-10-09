@@ -15,22 +15,20 @@
 
 platform :ios do
   private_lane :build do
-    puts "Build iOS application w/ automatic signing and create a provisioning profile."
-    # enable_automatic_code_signing(path: "./ios/MyAwesomeProject.xcodeproj")
     gym(
-        scheme: 'MyAwesomeProject',
-        workspace: './ios/MyAwesomeProject.xcworkspace',
-        silent: false,
-        clean: true,
-        configuration: 'Development',
-        output_directory: './fastlane/builds/',
-        output_name: 'MyAwesomeProject.ipa',
-        # xcargs: "-allowProvisioningUpdates",
-        codesigning_identity: 'Xcode iOS Wildcard App ID',
-        export_options: {
-            method: "ad-hoc",
-        }
-      )
+      scheme: 'MyAwesomeProject',
+      workspace: './ios/MyAwesomeProject.xcworkspace',
+      silent: false,
+      clean: true,
+      configuration: 'Development',
+      output_directory: './fastlane/builds/',
+      output_name: 'MyAwesomeProject.ipa',
+      xcargs: "-allowProvisioningUpdates",
+      codesigning_identity: ENV['CODE_SIGNING_IDENTITY'],
+      export_options: {
+          method: "ad-hoc",
+      }
+    )
   end
 
   lane :beta do
