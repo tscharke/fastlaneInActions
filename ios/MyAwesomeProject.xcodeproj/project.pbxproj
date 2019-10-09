@@ -657,7 +657,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = AB9U67QJ4F;
 				INFOPLIST_FILE = MyAwesomeProject/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -667,7 +667,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "-";
 				PRODUCT_NAME = MyAwesomeProject;
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = "Fastlane in Actions Development";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
