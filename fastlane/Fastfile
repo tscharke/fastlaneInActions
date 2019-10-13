@@ -14,7 +14,17 @@
 # update_fastlane
 
 platform :ios do
+  private_lane :certificates do
+    match(
+      app_identifier: ENV['APP_IDENTIFIER'],
+      type: ENV['MATCH_TYPE'],
+      readonly: true,
+    )
+  end
+
   private_lane :build do
+    certificates
+
     gym(
       scheme: 'MyAwesomeProject',
       workspace: './ios/MyAwesomeProject.xcworkspace',
