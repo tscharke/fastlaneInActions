@@ -20,6 +20,8 @@ platform :ios do
       type: ENV['MATCH_TYPE'],
       readonly: true,
       clone_branch_directly: true,
+      shallow_clone: true,
+      verbose: true,
     )
   end
 
