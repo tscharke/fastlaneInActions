@@ -40,6 +40,7 @@ jobs:
           cd ios
           pod install
           cd ..
+          ssh -T git@github.com
           fastlane ios beta
         env:
           APP_IDENTIFIER: de.dermeer.van.fastlaneInActions
