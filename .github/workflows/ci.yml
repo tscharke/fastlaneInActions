@@ -48,3 +48,4 @@ jobs:
           # Can be: appstore, adhoc, enterprise or development
           MATCH_TYPE: development
           URL_TO_FASTLANE_CERTIFICATES: ${{ secrets.URL_TO_FASTLANE_CERTIFICATES }}
+          MATCH_TOKEN: ${{ secrets.MATCH_TOKEN }}
