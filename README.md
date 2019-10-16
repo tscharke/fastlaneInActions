@@ -111,3 +111,15 @@ To use Fastlane we created the two Files: [Appfile](./fastlane/Appfile) and [Fas
 The `Fastfile` you can regard as a make/**build**-file. And `Appfile` contains the **configuration** we use inside the `Fastfile`. If you take a closer look to the `Appfile` you see that we reference values/creedentials out of our local [Dotfile](#create-a-dotfile-with-personal-apple-account-credentials).
 
 If everything works as designed we get a IPA-File in our defined Output-Directory `./fastlane/builds/` that we have configured [here](./fastlane/Fastfile#L25)
+
+# Issues
+
+## Build a React-Native-App
+
+- [x] Setup a React-Native-App
+- [x] Setup a fastlane workflow to build the App for iOS
+- [ ] Setup a GitHub-Action to run Fastlane
+
+## Ship a React-Native-App
+
+- [ ] 👉 (https://github.com/tscharke/fastlaneInActions/issues)
