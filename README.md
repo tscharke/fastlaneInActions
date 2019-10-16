@@ -19,6 +19,9 @@ So this repository is heavily under constructions (**work in progress**)!
       - [Create a dotfile with personal Apple-Account-Credentials](#create-a-dotfile-with-personal-apple-account-credentials)
       - [Setup Apple-Signing-Credentials](#setup-apple-signing-credentials)
 - [Fastlane](#fastlane)
+- [Issues](#issues)
+  - [Build a React-Native-App](#build-a-react-native-app)
+  - [Ship a React-Native-App](#ship-a-react-native-app)
 
 # Prerequisites
 
