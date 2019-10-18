@@ -21,7 +21,6 @@ platform :ios do
       readonly: true,
       shallow_clone: true,
       verbose: true,
-      # git_basic_authorization: ENV['MATCH_TOKEN'],
     )
   end
 
@@ -37,7 +36,10 @@ platform :ios do
       output_directory: './fastlane/builds/',
       output_name: 'MyAwesomeProject.ipa',
       export_options: {
-          method: "ad-hoc"
+          method: "ad-hoc",
+          provisioningProfiles: {
+              ENV['APP_IDENTIFIER'] => "match Development #{ENV['APP_IDENTIFIER']}",
+        }
       }
     )
   end
