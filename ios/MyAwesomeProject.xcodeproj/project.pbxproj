@@ -293,7 +293,7 @@
 					};
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = AB9U67QJ4F;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -631,10 +631,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = AB9U67QJ4F;
 				INFOPLIST_FILE = MyAwesomeProject/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -644,7 +644,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = de.dermeer.van.fastlaneInActions;
 				PRODUCT_NAME = MyAwesomeProject;
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = "match Development de.dermeer.van.fastlaneInActions";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -655,9 +655,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = AB9U67QJ4F;
 				INFOPLIST_FILE = MyAwesomeProject/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -667,7 +667,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = de.dermeer.van.fastlaneInActions;
 				PRODUCT_NAME = MyAwesomeProject;
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = "match Development de.dermeer.van.fastlaneInActions";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
