@@ -21,7 +21,7 @@ platform :ios do
       readonly: true,
       shallow_clone: true,
       verbose: true,
-      # git_basic_authorization: ENV['MATCH_TOKEN'],
+      template_name: "match Development #{ENV['APP_IDENTIFIER']}",
     )
   end
 
