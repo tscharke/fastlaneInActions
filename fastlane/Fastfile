@@ -20,7 +20,7 @@ platform :ios do
       type: ENV['MATCH_TYPE'],
       readonly: true,
       shallow_clone: true,
-      verbose: true,
+      verbose: false,
     )
   end
 
@@ -35,12 +35,12 @@ platform :ios do
       configuration: 'Development',
       output_directory: './fastlane/builds/',
       output_name: 'MyAwesomeProject.ipa',
-      xcargs: "-allowProvisioningUpdates",
+      # xcargs: "-allowProvisioningUpdates",
       export_options: {
           method: "ad-hoc",
-          provisioningProfiles: {
-              "de.dermeer.van.fastlaneInActions" => "match Development de.dermeer.van.fastlaneInActions",
-        }
+          # provisioningProfiles: {
+          #     "de.dermeer.van.fastlaneInActions" => "match Development de.dermeer.van.fastlaneInActions",
+        # }
       }
     )
   end
