@@ -38,7 +38,7 @@ platform :ios do
       export_options: {
           method: "ad-hoc",
           provisioningProfiles: {
-              ENV['APP_IDENTIFIER'] => "match Development #{ENV['APP_IDENTIFIER']}",
+              "de.dermeer.van.fastlaneInActions" => "match Development de.dermeer.van.fastlaneInActions",
         }
       }
     )
