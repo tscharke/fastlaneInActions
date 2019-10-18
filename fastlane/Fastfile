@@ -21,6 +21,7 @@ platform :ios do
       readonly: true,
       shallow_clone: true,
       verbose: false,
+      clone_branch_directly: true,
     )
   end
 
@@ -35,12 +36,8 @@ platform :ios do
       configuration: 'Development',
       output_directory: './fastlane/builds/',
       output_name: 'MyAwesomeProject.ipa',
-      # xcargs: "-allowProvisioningUpdates",
       export_options: {
           method: "ad-hoc",
-          # provisioningProfiles: {
-          #     "de.dermeer.van.fastlaneInActions" => "match Development de.dermeer.van.fastlaneInActions",
-        # }
       }
     )
   end
