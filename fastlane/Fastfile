@@ -35,6 +35,7 @@ platform :ios do
       configuration: 'Development',
       output_directory: './fastlane/builds/',
       output_name: 'MyAwesomeProject.ipa',
+      xcargs: "-allowProvisioningUpdates",
       export_options: {
           method: "ad-hoc",
           provisioningProfiles: {
