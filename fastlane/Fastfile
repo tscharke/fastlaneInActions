@@ -37,6 +37,8 @@ platform :ios do
       configuration: 'Development',
       output_directory: './fastlane/builds/',
       output_name: 'MyAwesomeProject.ipa',
+      skip_build_archive: true,
+      skip_archive: true,
     )
   end
 

@@ -23,9 +23,9 @@ jobs:
         with:
           ruby-version: ${{ matrix.ruby-version }}
       # Setup fastlane
-      - name: Setup Fastlane
-        run: |
-          gem install fastlane -NV
+#      - name: Setup Fastlane
+#        run: |
+#          gem install fastlane -NV
       # Setup Cocoapods
       - name: Setup Cocoapods
         run: |
@@ -45,7 +45,8 @@ jobs:
           bundle install
           bundle update fastlane
 
-          bundle exec fastlane ios beta
+#          bundle exec fastlane ios beta
+        yarn run ios:deploy
         env:
           APP_IDENTIFIER: de.dermeer.van.fastlaneInActions
           APPLE_ID: ${{ secrets.APPLE_ID }}
