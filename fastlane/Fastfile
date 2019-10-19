@@ -39,6 +39,10 @@ platform :ios do
       output_name: 'MyAwesomeProject.ipa',
       skip_build_archive: true,
       skip_archive: true,
+      export_options: {
+          method: "ad-hoc",
+      }
+
     )
   end
 
