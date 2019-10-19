@@ -19,9 +19,9 @@ platform :ios do
       app_identifier: ENV['APP_IDENTIFIER'],
       type: ENV['MATCH_TYPE'],
       readonly: true,
-      shallow_clone: true,
-      verbose: false,
-      clone_branch_directly: true,
+      # shallow_clone: true,
+      verbose: true,
+      # clone_branch_directly: true,
     )
   end
 
