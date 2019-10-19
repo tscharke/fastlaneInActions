@@ -47,7 +47,7 @@ jobs:
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
           # Can be: appstore, adhoc, enterprise or development
-          MATCH_TYPE: development
+          MATCH_TYPE: appstore
           URL_TO_FASTLANE_CERTIFICATES: ${{ secrets.URL_TO_FASTLANE_CERTIFICATES }}
           MATCH_TOKEN: ${{ secrets.MATCH_TOKEN }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}

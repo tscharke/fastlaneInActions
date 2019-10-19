@@ -19,9 +19,9 @@ platform :ios do
       app_identifier: ENV['APP_IDENTIFIER'],
       type: ENV['MATCH_TYPE'],
       readonly: true,
-      # shallow_clone: true,
-      verbose: true,
-      # clone_branch_directly: true,
+      shallow_clone: true,
+      verbose: false,
+      clone_branch_directly: true,
     )
   end
 
@@ -31,18 +31,21 @@ platform :ios do
     gym(
       scheme: 'MyAwesomeProject',
       workspace: './ios/MyAwesomeProject.xcworkspace',
-      silent: false,
+      silent: true,
       clean: true,
-      configuration: 'Development',
-      # output_directory: './fastlane/builds/',
+      # Development | Release
+      configuration: 'Release',
+      output_directory: './fastlane/builds/',
       output_name: 'MyAwesomeProject.ipa',
-      export_options: {
-          method: "ad-hoc",
-      }
     )
   end
 
   lane :beta do
     build
+
+    pilot(
+        ipa: './fastlane/builds/MyAwesomeProject.ipa',
+        skip_waiting_for_build_processing: true,
+      )
   end
 end
