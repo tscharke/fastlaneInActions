@@ -22,11 +22,6 @@ jobs:
         uses: actions/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby-version }}
-      # Setup fastlane
-#      - name: Setup Fastlane
-#        run: |
-#          gem install fastlane -NV
-      # Setup Cocoapods
       - name: Setup Cocoapods
         run: |
           gem install cocoapods
