@@ -44,8 +44,7 @@ jobs:
           gem install bundler
           bundle install
           bundle update fastlane
-
-          yarn ios:deploy
+          bundle exec fastlane ios beta
         env:
           APP_IDENTIFIER: de.dermeer.van.fastlaneInActions
           APPLE_ID: ${{ secrets.APPLE_ID }}
