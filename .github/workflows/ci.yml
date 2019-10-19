@@ -40,14 +40,13 @@ jobs:
           cd ios
           pod install
           cd ..
-          fastlane env
-          fastlane ios beta
+          bundle exec fastlane ios beta
         env:
           APP_IDENTIFIER: de.dermeer.van.fastlaneInActions
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
           # Can be: appstore, adhoc, enterprise or development
-          MATCH_TYPE: appstore
+          MATCH_TYPE: development
           URL_TO_FASTLANE_CERTIFICATES: ${{ secrets.URL_TO_FASTLANE_CERTIFICATES }}
           MATCH_TOKEN: ${{ secrets.MATCH_TOKEN }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
