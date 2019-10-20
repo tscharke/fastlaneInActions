@@ -39,7 +39,7 @@ jobs:
           gem install bundler
           bundle install
           bundle update fastlane
-          bundle fastlane env
+          bundle exec fastlane env
           bundle exec fastlane ios beta
         env:
           APP_IDENTIFIER: de.dermeer.van.fastlaneInActions
