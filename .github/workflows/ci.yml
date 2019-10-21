@@ -47,7 +47,9 @@ jobs:
           # Can be: appstore, adhoc, enterprise or development
           MATCH_TYPE: development
           URL_TO_FASTLANE_CERTIFICATES: ${{ secrets.URL_TO_FASTLANE_CERTIFICATES }}
-          MATCH_TOKEN: ${{ secrets.MATCH_TOKEN }}
-          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+#          MATCH_TOKEN: ${{ secrets.MATCH_TOKEN }}
+#          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
           BRANCH_OF_FASTLANE_CERTIFICATES: master
           CI: true
+          CI_KEYCHAIN_NAME: "CI_KEYCHAIN"
+          CI_KEYCHAIN_PASSWORD: ${{ secrets.CI_KEYCHAIN_PASSWORD }}
