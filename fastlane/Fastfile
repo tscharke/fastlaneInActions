@@ -62,7 +62,7 @@ platform :ios do
       export_options: {
           method: "development",
           provisioningProfiles: {
-              ENV['APP_IDENTIFIER'] => ENV["sigh_#{APP_IDENTIFIER}_#{MATCH_TYPE}_profile-name"],
+              ENV['APP_IDENTIFIER'] => ENV["sigh_#{ENV['APP_IDENTIFIER']}_#{ENV['MATCH_TYPE']}_profile-name"],
           }
       },
     )
@@ -71,7 +71,7 @@ platform :ios do
 
   lane :beta do
     # The default output of fastlane is quite verbose, so turn it down a little.
-    ENV["FASTLANE_SKIP_ACTION_SUMMARY"] = "true"
+    ENV["FASTLANE_SKIP_ACTION_SUMMARY"] = 'true'
 
     build
   end
