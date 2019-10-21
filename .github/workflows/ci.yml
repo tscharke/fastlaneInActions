@@ -50,3 +50,4 @@ jobs:
           MATCH_TOKEN: ${{ secrets.MATCH_TOKEN }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
           BRANCH_OF_FASTLANE_CERTIFICATES: master
+          CI: true

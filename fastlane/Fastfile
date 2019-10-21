@@ -14,15 +14,41 @@
 # update_fastlane
 
 platform :ios do
+  private lane :keychain do
+    if ENV['CI']
+      create_keychain(
+          name: "ci_keychain",
+          password: "123456",
+          default_keychain: true,
+          unlock: true,
+          timeout: 3600,
+          lock_when_sleeps: false
+      )
+    end
+  end
+
   private_lane :certificates do
-    match(
-      app_identifier: ENV['APP_IDENTIFIER'],
-      type: ENV['MATCH_TYPE'],
-      readonly: true,
-      shallow_clone: true,
-      verbose: false,
-      clone_branch_directly: true,
-    )
+    if ENV['CI']
+      match(
+          keychain_name: "ci_keychain",
+          keychain_password: "123456",
+          app_identifier: ENV['APP_IDENTIFIER'],
+          type: ENV['MATCH_TYPE'],
+          readonly: true,
+          shallow_clone: true,
+          verbose: false,
+          clone_branch_directly: true,
+        )
+      else
+        match(
+          app_identifier: ENV['APP_IDENTIFIER'],
+          type: ENV['MATCH_TYPE'],
+          readonly: true,
+          shallow_clone: true,
+          verbose: false,
+          clone_branch_directly: true,
+        )
+    end
   end
 
   private_lane :build do
