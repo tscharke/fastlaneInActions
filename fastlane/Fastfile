@@ -38,7 +38,10 @@ platform :ios do
       output_directory: './fastlane/builds/',
       output_name: 'MyAwesomeProject.ipa',
       export_options: {
-          method: "ad-hoc",
+          method: "development",
+          provisioningProfiles: {
+              "de.dermeer.van.fastlaneInActions" => ENV["sigh_de.dermeer.van.fastlaneInActions_development_profile-name"],
+          }
       },
       disable_xcpretty: true,
     )
