@@ -14,7 +14,7 @@
 # update_fastlane
 
 platform :ios do
-  private lane :keychain do
+  private_lane :certificates do
     if ENV['CI']
       create_keychain(
           name: "ci_keychain",
@@ -24,11 +24,6 @@ platform :ios do
           timeout: 3600,
           lock_when_sleeps: false
       )
-    end
-  end
-
-  private_lane :certificates do
-    if ENV['CI']
       match(
           keychain_name: "ci_keychain",
           keychain_password: "123456",
