@@ -47,12 +47,6 @@ platform :ios do
   end
 
   private_lane :build do
-    # The default output of fastlane is quite verbose, so turn it down a little.
-    ENV['FASTLANE_SKIP_UPDATE_CHECK'] = "1"
-    ENV['FASTLANE_HIDE_CHANGELOG'] = "1"
-    ENV['FASTLANE_HIDE_TIMESTAMP'] = "1"
-    ENV['FASTLANE_DISABLE_OUTPUT_FORMAT'] = "1"
-
     # Run lane 'ci_certificates' or 'certificates' depends on the system we’re using
     ENV['CI'] ? ci_certificates : certificates
 
@@ -75,6 +69,9 @@ platform :ios do
   end
 
   lane :beta do
+    # The default output of fastlane is quite verbose, so turn it down a little.
+    ENV["FASTLANE_SKIP_ACTION_SUMMARY"] = nil
+
     build
   end
 end
