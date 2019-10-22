@@ -1,37 +1,64 @@
-# This file contains the fastlane.tools configuration
-# You can find the documentation at https://docs.fastlane.tools
-#
-# For a list of all available actions, check out
-#
-#     https://docs.fastlane.tools/actions
-#
-# For a list of all available plugins, check out
-#
-#     https://docs.fastlane.tools/plugins/available-plugins
-#
+opt_out_usage
 
-# Uncomment the line if you want fastlane to automatically update itself
-# update_fastlane
+update_fastlane
 
 platform :ios do
-  private_lane :build do
-    puts "Build iOS application w/ automatic signing and create a provisioning profile."
-    gym(
-        scheme: 'MyAwesomeProject',
-        workspace: './ios/MyAwesomeProject.xcworkspace',
-        silent: false,
-        clean: true,
-        configuration: 'Development',
-        output_directory: './fastlane/builds/',
-        output_name: 'MyAwesomeProject.ipa',
-        xcargs: "-allowProvisioningUpdates",
-        export_options: {
-            method: "ad-hoc",
-        }
-      )
+  private_lane :ci_certificates do
+    create_keychain(
+      name: ENV['CI_KEYCHAIN_NAME'],
+      password: ENV['CI_KEYCHAIN_PASSWORD'],
+      default_keychain: true,
+      unlock: true,
+      timeout: 3600,
+      lock_when_sleeps: false
+    )
+    match(
+      keychain_name: ENV['CI_KEYCHAIN_NAME'],
+      keychain_password: ENV['CI_KEYCHAIN_PASSWORD'],
+      app_identifier: ENV['APP_IDENTIFIER'],
+      type: ENV['MATCH_TYPE'],
+      readonly: true,
+      shallow_clone: true,
+      verbose: false,
+      clone_branch_directly: true,
+    )
   end
 
-  lane :beta do
+  private_lane :certificates do
+    match(
+      app_identifier: ENV['APP_IDENTIFIER'],
+      type: ENV['MATCH_TYPE'],
+      readonly: true,
+      shallow_clone: true,
+      verbose: false,
+      clone_branch_directly: true,
+    )
+  end
+
+  private_lane :build do
+    # Run lane 'ci_certificates' or 'certificates' depends on the system we’re using
+    ENV['CI'] ? ci_certificates : certificates
+
+    # Build the MyAwesomeProject
+    gym(
+      scheme: 'MyAwesomeProject',
+      workspace: './ios/MyAwesomeProject.xcworkspace',
+      silent: true,
+      clean: true,
+      configuration: 'Development',
+      output_directory: './fastlane/builds/',
+      output_name: 'MyAwesomeProject.ipa',
+      export_options: {
+          method: "development",
+          provisioningProfiles: {
+              ENV['APP_IDENTIFIER'] => ENV["sigh_#{ENV['APP_IDENTIFIER']}_#{ENV['MATCH_TYPE']}_profile-name"],
+          }
+      },
+    )
+  end
+
+
+  lane :buildAndShip do
     build
   end
 end

@@ -1,0 +1,7 @@
+git_url(ENV['URL_TO_FASTLANE_CERTIFICATES'])
+git_branch(ENV['BRANCH_OF_FASTLANE_CERTIFICATES'])
+storage_mode("git")
+
+type(ENV['MATCH_TYPE'])
+app_identifier ENV['APP_IDENTIFIER']
+username(ENV['APPLE_ID'])

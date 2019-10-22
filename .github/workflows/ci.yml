@@ -1,0 +1,53 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: macOS-10.14
+
+    strategy:
+      matrix:
+        node-version: [8.x]
+        ruby-version: [ '2.4.x']
+
+    steps:
+      - name: Install Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Install Ruby
+        uses: actions/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby-version }}
+      - name: Checkout repository
+        uses: actions/checkout@v1
+      - name: Install Cocoapods
+        run: |
+          gem install cocoapods
+      - name: Install Fastlane
+        run: |
+          gem install bundler
+          bundle install
+          bundle update fastlane
+      - name: Install dependencies and build React-Native-App
+        run: |
+          yarn install
+
+          cd ios
+          pod install
+          cd ..
+
+          bundle exec fastlane ios buildAndShip
+        env:
+          APP_IDENTIFIER: de.dermeer.van.fastlaneInActions
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          # Can be: appstore, adhoc, enterprise or development
+          MATCH_TYPE: development
+          URL_TO_FASTLANE_CERTIFICATES: ${{ secrets.URL_TO_FASTLANE_CERTIFICATES }}
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+          BRANCH_OF_FASTLANE_CERTIFICATES: master
+          CI: true
+          CI_KEYCHAIN_NAME: "CI_KEYCHAIN"
+          CI_KEYCHAIN_PASSWORD: ${{ secrets.CI_KEYCHAIN_PASSWORD }}

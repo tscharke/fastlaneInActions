@@ -1,128 +1,186 @@
-# Motivation
+The idea is to build ~~and ship~~ a **React-Native**-App (iOS ~~and Android~~\*) with [Fastlane](https://fastlane.tools) and [GitHub-Actions](https://help.github.com/en/articles/about-github-actions).
 
-The idea is to build and ship a **React-Native**-App (iOS and Android) with [Fastlane](https://fastlane.tools) and using [GitHub-Actions](https://help.github.com/en/articles/about-github-actions) to do this.
+Or in simpler words: Using GitHub-Actions as a **CI** for a **React-Native**-App's.
 
-Or in simpler words: Use GitHub-Actions as a CI for a React-Native-App.
+I'm trying to document my way to get this goal here.
 
-I wanna try to document my way to get this goal here.
+\*_Note: Currently the React-Native-App is only **built** and that only for **iOS** 🤷‍_
 
-So this repository is heavily under constructions (**work in progress**)!
+# TOC
 
-# Contents
-
-- [Prerequisites](#prerequisites)
-- [Start the App](#start-the-app)
-  - [iOS](#iOS)
-- [Build the App with Fastlane](#build-the-app-with-fastlane)
-  - [Apple](#apple)
-    - [Prerequisites (Build with Fastlane)](<#prerequisites-(build-with-fastlane)>)
-      - [Create a dotfile with personal Apple-Account-Credentials](#create-a-dotfile-with-personal-apple-account-credentials)
-      - [Setup Apple-Signing-Credentials](#setup-apple-signing-credentials)
-- [Fastlane](#fastlane)
-- [Issues](#issues)
-  - [Build a React-Native-App](#build-a-react-native-app)
-  - [Ship a React-Native-App](#ship-a-react-native-app)
+- [Prerequisites](#Prerequisites)
+  - [Creating a certificate and identifier](#Creating-a-certificate-and-identifier)
+    - [Creating a profile with fastlane](#Creating-a-profile-with-fastlane)
+      - [Fastlane match](#Fastlane-match)
+      - [Create a certificate git repository](#Create-a-certificate-git-repository)
+        - [The URI to your certificate repository](#The-URI-to-your-certificate-repository)
+      - [Run match and create & store your certificates & provisioning profiles](#Run-match-and-create-&-store-your-certificates-&-provisioning-profiles)
+- [Build the React-Native-App on your machine](#Build-the-React-Native-App-on-your-machine)
+  - [Create a dotfile with personal Apple-Account-Credentials](#Create-a-dotfile-with-personal-Apple-Account-Credentials)
+  - [Build app with fastlane](#Build-app-with-fastlane)
+- [Run the React-Native-App on your machine](#Run-the-React-Native-App-on-your-machine)
+- [Build the React-Native-App on GitHub](#Build-the-React-Native-App-on-GitHub)
+  - [Where is the magic](#Where-is-the-magic)
+  - [Using this with your own repository](#Using-this-with-your-own-repository)
+    - [Set some secrets on your repository](#Set-some-secrets-on-your-repository)
 
 # Prerequisites
 
-- A Mac with macOX >= 10.14.6
+- A machine with macOX >= 10.14.6
 - Xcode >= 10.3
-- The latest Xcode command line tools 👉 `xcode-select --install`
+- The latest Xcode `command line tools` 👉 `xcode-select --install`
 - Cocoapods >= 1.7.1 👉 https://cocoapods.org
 - Global installed react-native-cli >= 2.0.1 👉`npm install -g react-native-cli`
+- Ruby >= 2.3.3p222
 - Fastlane >= 2.133.0
+- Apple ID
+- Apple Developer Account 👉 https://developer.apple.com/account
 
-# Start the App
+## Creating a certificate and identifier
 
-## iOS
+The next steps are a walk through at [Apple's Developer Account-Platform](https://developer.apple.com/account) inside the section [Certificates, Identifiers & Profiles](https://developer.apple.com/account/resources/certificates/list).
 
-To start the React-Native-App on your local machine do…
+1. Create a new certificate of type `iOS Development`. If you already own one, then this step is _optional_.
+2. Create a new [idendtifier](https://developer.apple.com/account/resources/identifiers/list) with following properties: <br/>
+   |Type|Value|Comment|
+   |----|-----|-------|
+   |Platform|iOS, tvOS, watchOS|Required|
+   |Description|FastlaneInActionsApp|Optional, choose a name you like|
+   |Bundle ID|`de.dermeer.van.fastlaneInActions`|Required, cause we need exactly this `APP_IDENTIFIER` |
+   |Capabilities|Use the defaults||
+3. The profile we will automatically create with `fastlane` on the local machine.
 
-1. Open your terminal
-2. Switch to you project-folder
-3. Go to your _ios_-folder 👉 `cd ios`
-4. (Optional) Install Cocoapods by running `pod install`
-5. (Optional) Go back to your project-folder 👉`cd ..`
-6. Run the App with `yarn ios:app` or open [./ios/MyAwesomeProject.xcodeproj](ios/MyAwesomeProject.xcodeproj) with Xcode.
-7. 🎉🎉🎉
+### Creating a profile with fastlane
 
-**Note**: The steps 4 and 5 are optional and needed only the very first time.
+#### Fastlane match
 
-# Build the App with Fastlane
+We use [fatlane's `match`](https://docs.fastlane.tools/actions/match) to create and manage all required certificates & provisioning profiles and stores them in a separate git repository.
 
-## Apple
+With this, `match` is a implementation of the [codesigning.guide concept](https://codesigning.guide) that you should read through unconditionally!
 
-To build the React-Native-App with **Fastlane** just call…
+So you have to create such a **certificate git repository** first.
 
-```bash
-yarn ios:deploy
-```
+#### Create a certificate git repository
 
-inside a terminal. This runs the script `fastlane ios beta --env development` (as you can see in [package.json](package.json#L11)). It's only syntactic sugar around the original fastlane-command.
+You can create your certificate repository on GitHub and Bitbucket. I use GitHub myself, so that I also briefly describe the way how to set it up for GitHub here:
 
-**Note**: If it's the **first time** you run the deploy-script/fastlane-command, please follow the steps in [Prerequisites (Build with Fastlane)](<Prerequisites-(Build-with-Fastlane)>).
+1. Open [https://github.com/new](https://github.com/new).
+2. Choose a repository name (e.g `certificates`).
+3. Make sure it's a **private** repository.
+4. Do not initialize this repository with a readme nor a license.
+5. Create the repository.
 
-### Prerequisites (Build with Fastlane)
+And there's one last step…To give fastlane's `match` access to this repository you've to create a [_Personal access tokens_](https://github.com/settings/tokens) at GitHub.
 
-#### Create a dotfile with personal Apple-Account-Credentials
+Create/Generate a new token with a name of your choise and select the scope `repo` only.
 
-Inside our fastlane [Appfile](./fastlane/Appfile) we use an `APP_IDENTIFIER`, an `APPLE_ID` and an `APPLE_TEAM_ID`. This values are received out of a **Dotfile** which wasn't commit and ship with the repository, because it contains private information.
+##### The URI to your certificate repository
 
-To create this **Dotfile** run the following command and add for `APPLE_ID` and `APPLE_TEAM_ID` your personal Apple-Account-Credentials:
+Keep the generated token, as we use it to create the url to your certificate repository.
+
+The URL for fastlane's `match` follow this pattern: `https://{token}@{url to your repository}`. Means…
+
+- Copy the **https**-uri of your above created repository 👉 [remember?](#create-a-certificate-git-repository) (e.g. `https://github.com/johndoe/certificates.git`).
+- Create the url with aboves pattern, your token and the url of your repository.
+
+A typcial url for fastlane's `match` looks like this: `https://4711@github.com/johndoe/certificates.git`
+
+#### Run match and create & store your certificates & provisioning profiles
+
+With this setup we're prepared to use fastlane's `match` on your local machine to create all missing certificates & provisioning profiles and store them in your personal and **private** certificate repository.
+
+You can now…
+
+- open a terminal,
+- moving to the folder in which you checked out this repository,
+- running `fastlane match development`.
+
+During this process fastlane's `match` ask you for some data. It needs the url to the certificate repository (**IMPORTANT**: use the **https**-url with **token**), your **Apple Id** and an **APP_IDENTIFIER** (in our case `de.dermeer.van.fastlaneInActions`).
+
+If the process finnished it stored all newly created certificates & provisioning profiles at your private certificate repository and at Apple's Developer Account-Platform inside the section [Profiles](https://developer.apple.com/account/resources/profiles/list)
+
+# Build the React-Native-App on your machine
+
+## Create a dotfile with personal Apple-Account-Credentials
+
+If you've checkout this repository you'll find already a [Matchfile](./fastlane/Matchfile) inside the [fastlane folder](./fastlane). This `Matchfile` provides some information for fastlane. Which kind of information and more you can read in [fastlane's docs for `match`](https://docs.fastlane.tools/actions/match).
+
+Relevant for now is that our `Matchfile` uses a lot of environment variables we've to set (e.g. the `APP_IDENTIFIER`).
+
+To make our life easier we will set all environment variables via a **Dotfile** with name `.env.development`. You can do it by running this bash command (replace the placeholder with your own values) inside the folder in which you checked out this repository:
 
 ```bash
 cat <<EOF >> ./fastlane/.env.development
-NODE_BINARY=node
-APP_IDENTIFIER=org.reactjs.native.example.MyAwesomeProject
-APPLE_ID=
-APPLE_TEAM_ID=
+APP_IDENTIFIER=de.dermeer.van.fastlaneInActions
+APPLE_ID={ YOUR APPLE_ID }
+APPLE_TEAM_ID={ YOUR APPLE TEAM ID }
+URL_TO_FASTLANE_CERTIFICATES={ THE URL TO YOUR CERTIFICATION-REPOSITORY* }
+BRANCH_OF_FASTLANE_CERTIFICATES=master
 EOF
 ```
 
-This creats your personal Dotfile [./fastlane/.env.development](./fastlane/.env.development) you can modified as you like.
+\* **IMPORTANT**: This is the **https**-url with **token**!!!
 
-**Note**: Do **NOT checkin** this file. It's already listed in [gitignore](.gitignore#L60).
+This creats your personal Dotfile [./fastlane/.env.development](./fastlane/.env.development) and you can modified as you like and needed.
 
-#### Setup Apple-Signing-Credentials
+Do **NOT checkin** this Dotfile. It's already listed in [gitignore](.gitignore#L58).
 
-Before we can run a fast*lane* we have to setup credentials to sign and identify the App. So…
+## Build app with fastlane
 
-- Open [./ios/MyAwesomeProject.xcodeproj](ios/MyAwesomeProject.xcodeproj) with Xcode.
-- Show the "Project Navigator".
-- Select _MyAwesomeProject_ (with a single click).
-- Inside the "Editor" you will see **PROJECT** and **TARGEST**.
-- Select _MyAwesomeProject_ from the **TARGEST**-Group (with a single click).
-- Now you can see the Groups **Identity** and **Signing**.
-- For this project and scenario we leave all values the way they are set by default. You should see…
-  - **Display Name**: `MyAwesomeProject`
-  - **Bundle Idenitfier**: `org.reactjs.native.example.MyAwesomeProject`
-  - **Version**: `1.0`
-  - **Build**: `1``
+At this point you're well prepared and we can build (and only build) the React-Native-App with fastlane by running the command `fastlane ios buildAndShip --env development` or simpler by running the script with yarn: `yarn deploy:ios:local`.
 
-And now the **IMPORTANT** part! Inside the Group **Signing**…
+If your setup was successful, at the end you will find an IPA-file and dSYM-file in folder [./fastlane/builds](./fastlane/builds).
 
-- Make sure for **Automatically manage sinigning** what you `enable` the checkbox.
-- And for **Team** select your personal Apple-Account.
-- We're done - close Xcode, please.
+# Run the React-Native-App on your machine
 
-# Fastlane
+Running the React-Native-App on your machine is possible by unsing the React-Native CLI: `react-native run-ios` or by running the script with yarn: `yarn ios:app`.
 
-Currently we use [Fastlane-Gym](https://docs.fastlane.tools/actions/gym/) to build the app only and assume that we **automatically manage sinigning** and **automatically create a provisioning profile** (for `org.reactjs.native.example.MyAwesomeProject`) if this not exist.
+It will starts the iOS-Simulator and will show the default "Welcome to React"-App:
 
-To use Fastlane we created the two Files: [Appfile](./fastlane/Appfile) and [Fastfile](./fastlane/Fastfile).
+![Welcome to React](https://facebook.github.io/react-native/img/homepage/phones.png)
 
-The `Fastfile` you can regard as a make/**build**-file. And `Appfile` contains the **configuration** we use inside the `Fastfile`. If you take a closer look to the `Appfile` you see that we reference values/creedentials out of our local [Dotfile](#create-a-dotfile-with-personal-apple-account-credentials).
+# Build the React-Native-App on GitHub
 
-If everything works as designed we get a IPA-File in our defined Output-Directory `./fastlane/builds/` that we have configured [here](./fastlane/Fastfile#L25)
+The idea on the goal of this project was to build a **React-Native**-App with Fastlane on GitHub-Actions and therefor using GitHub as a CI.
 
-# Issues
+You can see the result in the **Actions**-panel of this repository at GitHub 👉[https://github.com/tscharke/fastlaneInActions/actions](https://github.com/tscharke/fastlaneInActions/actions)
 
-## Build a React-Native-App
+## Where is the magic
 
-- [x] Setup a React-Native-App
-- [x] Setup a fastlane workflow to build the App for iOS
-- [ ] Setup a GitHub-Action to run Fastlane
+All the "magic" to build the React-Native-App with GitHub-Actions are exist in the Workflows yml-file [.github/workflows/ci.yml](.github/workflows/ci.yml).
 
-## Ship a React-Native-App
+An intruduction what GitHub-Actions are and how these can be used you find very well explained in the [GitHub-Actions documentation](https://help.github.com/en/github/automating-your-workflow-with-github-actions).
 
-- [ ] 👉 (https://github.com/tscharke/fastlaneInActions/issues)
+Short what is being done here or better whats happend in our Workflows yml-file:
+
+1. We make sure what all runs on `macOX`.
+2. We installing `node` (for this we use the predefined Action [actions/setup-node](https://github.com/actions/setup-node)).
+3. We installing `ruby` (for this we use the predefined Action [actions/setup-ruby](https://github.com/actions/setup-ruby)).
+4. We installing `cocopods`.
+5. We installing `fastlane`.
+6. We installing all dependencies (`yarn install`).
+7. We installing all pods (moving to the `ios`-folder, running`pod install`, moving out of this folder)
+8. We running`fastlane ios buildAndShip`.
+
+## Using this with your own repository
+
+Feel free to clone this repository or simple copy the Workflows YML-File [.github/workflows/ci.yml](.github/workflows/ci.yml).
+
+As you can see - inside the Workflows YML-File - that we're sharing following environment-variables to the CI-System:
+
+| Name                            | Value                              | Description                                                                            |
+| ------------------------------- | ---------------------------------- | -------------------------------------------------------------------------------------- |
+| APP_IDENTIFIER                  | `de.dermeer.van.fastlaneInActions` |                                                                                        |
+| APPLE_ID                        | **SECRET**                         | Your personal Apple Id                                                                 |
+| APPLE_TEAM_ID                   | **SECRET**                         | Your personal Apple Team-Id                                                            |
+| MATCH_TYPE                      | `development`                      | appstore, adhoc, enterprise or development                                             |  |
+| URL_TO_FASTLANE_CERTIFICATES    | **SECRET**                         | The **https**-url (with **token**) to your personal and private certificate repository |
+| MATCH_PASSWORD                  | **SECRET**                         | Password of your certificate repository                                                |
+| BRANCH_OF_FASTLANE_CERTIFICATES | master                             |                                                                                        |
+| CI                              | true                               |                                                                                        |
+| CI_KEYCHAIN_NAME                | `CI_KEYCHAIN`                      |                                                                                        |
+| CI_KEYCHAIN_PASSWORD            | **SECRET**                         | Password for the internal used keychain. You may bet on any value you like             |
+
+### Set some secrets on your repository
+
+What is it with the **SECRET** marke values? This are values you **never share** public and they're needed on your repository too. So please provide this environment-variables as [GitHub-Secrets](https://help.github.com/en/github/automating-your-workflow-with-github-actions/virtual-environments-for-github-actions#creating-and-using-secrets-encrypted-variables) on your own repository.
