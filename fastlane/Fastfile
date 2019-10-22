@@ -50,6 +50,12 @@ platform :ios do
     # Run lane 'ci_certificates' or 'certificates' depends on the system we’re using
     ENV['CI'] ? ci_certificates : certificates
 
+    cocoapods(
+      podfile: "./ios/Podfile",
+      silent: true,
+      verbose: false,
+    )
+
     # Build the MyAwesomeProject
     gym(
       scheme: 'MyAwesomeProject',
