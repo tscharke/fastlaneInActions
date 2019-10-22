@@ -30,13 +30,15 @@ jobs:
           gem install bundler
           bundle install
           bundle update fastlane
-      - name: Install dependencies and build React-Native-App
+      - name: Install dependencies, test and build React-Native-App
         run: |
           yarn install
 
           cd ios
           pod install
           cd ..
+
+          yarn test
 
           bundle exec fastlane ios buildAndShip
         env:
