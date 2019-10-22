@@ -1,17 +1,4 @@
-# This file contains the fastlane.tools configuration
-# You can find the documentation at https://docs.fastlane.tools
-#
-# For a list of all available actions, check out
-#
-#     https://docs.fastlane.tools/actions
-#
-# For a list of all available plugins, check out
-#
-#     https://docs.fastlane.tools/plugins/available-plugins
-#
-
-# Uncomment the line if you want fastlane to automatically update itself
-# update_fastlane
+update_fastlane
 
 platform :ios do
   private_lane :ci_certificates do
@@ -75,10 +62,7 @@ platform :ios do
   end
 
 
-  lane :beta do
-    # The default output of fastlane is quite verbose, so turn it down a little.
-    ENV["FASTLANE_SKIP_ACTION_SUMMARY"] = 'true'
-
+  lane :buildAndShip do
     build
   end
 end
