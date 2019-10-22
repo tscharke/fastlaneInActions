@@ -41,7 +41,8 @@ I'm trying to document my way to get this goal here.
 The next steps are a walk through at [Apple's Developer Account-Platform](https://developer.apple.com/account) inside the section [Certificates, Identifiers & Profiles](https://developer.apple.com/account/resources/certificates/list).
 
 1. Create a new certificate of type `iOS Development`. If you already own one, then this step is _optional_.
-2. Create a new [idendtifier](https://developer.apple.com/account/resources/identifiers/list) with following properties: <br/>
+2. Create a new [identifier](https://developer.apple.com/account/resources/identifiers/list) with following properties: <br/>
+
    |Type|Value|Comment|
    |----|-----|-------|
    |Platform|iOS, tvOS, watchOS|Required|
