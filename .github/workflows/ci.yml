@@ -20,13 +20,13 @@ jobs:
         uses: actions/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby-version }}
+      - name: Checkout repository
+        uses: actions/checkout@v1
       - name: Setup Ruby and update Fastlane
         run: |
           gem install bundler
           bundle install
           bundle update fastlane
-      - name: Checkout repository
-        uses: actions/checkout@v1
       - name: Install dependencies and build React-Native-App
         run: |
           yarn install
