@@ -12,34 +12,25 @@ jobs:
         ruby-version: [ '2.4.x']
 
     steps:
-      # Setup Node
-      - name: Setup Node
+      - name: Install Node
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      # Setup ruby
-      - name: Setup Ruby
+      - name: Install Ruby
         uses: actions/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby-version }}
-      - name: Setup Cocoapods
+      - name: Setup Ruby and update Fastlane
         run: |
-          gem install cocoapods
-      # Checkout repository
-      - name: Checkout repository
-        uses: actions/checkout@v1
-      # Build and Test
-      - name: Install dependencies and build React-Native-App
-        run: |
-          yarn install
-          cd ios
-          pod install
-          cd ..
-
           gem install bundler
           bundle install
           bundle update fastlane
-          bundle exec fastlane ios beta
+      - name: Checkout repository
+        uses: actions/checkout@v1
+      - name: Install dependencies and build React-Native-App
+        run: |
+          yarn install
+          bundle exec fastlane ios buildAndShip
         env:
           APP_IDENTIFIER: de.dermeer.van.fastlaneInActions
           APPLE_ID: ${{ secrets.APPLE_ID }}

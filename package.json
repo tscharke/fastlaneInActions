@@ -8,7 +8,7 @@
     "start": "react-native start",
     "test": "jest",
     "ios:app": "react-native run-ios",
-    "deploy:ios:local": "fastlane ios beta --env development"
+    "deploy:ios:local": "fastlane ios buildAndShip --env development"
   },
   "dependencies": {
     "react": "16.9.0",
