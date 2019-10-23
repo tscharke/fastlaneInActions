@@ -1,3 +1,5 @@
+![Badge](https://github.com/tscharke/fastlaneInActions/workflows/CI/badge.svg)
+
 The idea is to build ~~and ship~~ a **React-Native**-App (iOS ~~and Android~~\*) with [Fastlane](https://fastlane.tools) and [GitHub-Actions](https://help.github.com/en/articles/about-github-actions).
 
 Or in simpler words: Using GitHub-Actions as a **CI** for a **React-Native**-App's.
@@ -43,19 +45,20 @@ The next steps are a walk through at [Apple's Developer Account-Platform](https:
 1. Create a new certificate of type `iOS Development`. If you already own one, then this step is _optional_.
 2. Create a new [identifier](https://developer.apple.com/account/resources/identifiers/list) with following properties: <br/>
 
-   |Type|Value|Comment|
-   |----|-----|-------|
-   |Platform|iOS, tvOS, watchOS|Required|
-   |Description|FastlaneInActionsApp|Optional, choose a name you like|
-   |Bundle ID|`de.dermeer.van.fastlaneInActions`|Required, cause we need exactly this `APP_IDENTIFIER` |
-   |Capabilities|Use the defaults||
+   | Type         | Value                              | Comment                                               |
+   | ------------ | ---------------------------------- | ----------------------------------------------------- |
+   | Platform     | iOS, tvOS, watchOS                 | Required                                              |
+   | Description  | FastlaneInActionsApp               | Optional, choose a name you like                      |
+   | Bundle ID    | `de.dermeer.van.fastlaneInActions` | Required, cause we need exactly this `APP_IDENTIFIER` |
+   | Capabilities | Use the defaults                   |                                                       |
+
 3. The profile we will automatically create with `fastlane` on the local machine.
 
 ### Creating a profile with fastlane
 
 #### Fastlane match
 
-We use [fatlane's `match`](https://docs.fastlane.tools/actions/match) to create and manage all required certificates & provisioning profiles and stores them in a separate git repository.
+We use [fastlane's `match`](https://docs.fastlane.tools/actions/match) to create and manage all required certificates & provisioning profiles and stores them in a separate git repository.
 
 With this, `match` is a implementation of the [codesigning.guide concept](https://codesigning.guide) that you should read through unconditionally!
 
@@ -148,20 +151,22 @@ You can see the result in the **Actions**-panel of this repository at GitHub üë
 
 ## Where is the magic
 
-All the "magic" to build the React-Native-App with GitHub-Actions are exist in the Workflows yml-file [.github/workflows/ci.yml](.github/workflows/ci.yml).
+All _magic_ to build the React-Native-App with GitHub-Actions are exist in the Workflows yml-file [.github/workflows/ci.yml](.github/workflows/ci.yml).
 
 An intruduction what GitHub-Actions are and how these can be used you find very well explained in the [GitHub-Actions documentation](https://help.github.com/en/github/automating-your-workflow-with-github-actions).
 
 Short what is being done here or better whats happend in our Workflows yml-file:
 
-1. We make sure what all runs on `macOX`.
-2. We installing `node` (for this we use the predefined Action [actions/setup-node](https://github.com/actions/setup-node)).
-3. We installing `ruby` (for this we use the predefined Action [actions/setup-ruby](https://github.com/actions/setup-ruby)).
-4. We installing `cocopods`.
-5. We installing `fastlane`.
-6. We installing all dependencies (`yarn install`).
-7. We installing all pods (moving to the `ios`-folder, running`pod install`, moving out of this folder)
-8. We running`fastlane ios buildAndShip`.
+1. Make sure what all runs on `macOX`.
+2. Install `node` (for this we use the predefined Action [actions/setup-node](https://github.com/actions/setup-node)).
+3. Checkout the current repository.
+4. Install all dependencies (`yarn install`).
+5. Run all test (`yarn test`).
+6. Run `fastlane ios buildAndShip`.
+
+If you wonder from where the `fastlane` comes? GithHub-Actions directly provided a `fastlane` for use (thanks to Jens N. for this tip üôè). So it's not necessary to install `ruby` nor `gems`.
+
+The installation of `pods` we do directly in our [Fastfile](./fastlane/Fastfile#L40) with [fastlane's `cocoapods`-Action](https://docs.fastlane.tools/actions/cocoapods).
 
 ## Using this with your own repository
 

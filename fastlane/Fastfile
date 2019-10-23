@@ -1,7 +1,5 @@
 opt_out_usage
 
-update_fastlane
-
 platform :ios do
   private_lane :ci_certificates do
     create_keychain(
@@ -38,6 +36,11 @@ platform :ios do
   private_lane :build do
     # Run lane 'ci_certificates' or 'certificates' depends on the system we’re using
     ENV['CI'] ? ci_certificates : certificates
+
+    cocoapods(
+      repo_update: true,
+      podfile: "./ios/Podfile"
+    )
 
     # Build the MyAwesomeProject
     gym(
