@@ -17,9 +17,6 @@ jobs:
       - uses: actions/checkout@v1
       - name: Install dependencies, test and build React-Native-App
         run: |
-          gem install bundler
-          bundle install
-
           yarn install
           yarn test
           fastlane ios buildAndShip
