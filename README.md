@@ -1,4 +1,4 @@
-https://github.com/tscharke/fastlaneInActions/workflows/CI/badge.svg
+![Badge](https://github.com/tscharke/fastlaneInActions/workflows/CI/badge.svg)
 
 The idea is to build ~~and ship~~ a **React-Native**-App (iOS ~~and Android~~\*) with [Fastlane](https://fastlane.tools) and [GitHub-Actions](https://help.github.com/en/articles/about-github-actions).
 
