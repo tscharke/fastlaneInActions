@@ -19,7 +19,7 @@ jobs:
         run: |
           yarn install
           yarn test
-          fastlane ios buildAndShip
+          fastlane ios buildAndShip 2>&1 1>/dev/null
         env:
           APP_IDENTIFIER: de.dermeer.van.fastlaneInActions
           APPLE_ID: ${{ secrets.APPLE_ID }}
