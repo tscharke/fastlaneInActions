@@ -13,8 +13,6 @@ platform :ios do
     match(
       keychain_name: ENV['CI_KEYCHAIN_NAME'],
       keychain_password: ENV['CI_KEYCHAIN_PASSWORD'],
-      app_identifier: ENV['APP_IDENTIFIER'],
-      type: ENV['MATCH_TYPE'],
       readonly: true,
       shallow_clone: true,
       verbose: false,
@@ -24,8 +22,6 @@ platform :ios do
 
   private_lane :certificates do
     match(
-      app_identifier: ENV['APP_IDENTIFIER'],
-      type: ENV['MATCH_TYPE'],
       readonly: true,
       shallow_clone: true,
       verbose: false,
