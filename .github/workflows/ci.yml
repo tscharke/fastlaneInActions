@@ -22,6 +22,7 @@ jobs:
           yarn ios:buildAndShip
         env:
           APP_IDENTIFIER: de.dermeer.van.fastlaneInActions
+          URL_TO_FASTLANE_CERTIFICATES_REPO: ${{ secrets.URL_TO_FASTLANE_CERTIFICATES_REPO }}
           CI: true
           CI_KEYCHAIN_NAME: "CI_KEYCHAIN"
           CI_KEYCHAIN_PASSWORD: ${{ secrets.CI_KEYCHAIN_PASSWORD }}
