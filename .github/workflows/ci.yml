@@ -19,16 +19,9 @@ jobs:
         run: |
           yarn install
           yarn test
-          fastlane ios buildAndShip 2>&1 1>/dev/null
+          yarn ios:buildAndShip
         env:
           APP_IDENTIFIER: de.dermeer.van.fastlaneInActions
-          APPLE_ID: ${{ secrets.APPLE_ID }}
-          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
-          # Can be: appstore, adhoc, enterprise or development
-          MATCH_TYPE: development
-          URL_TO_FASTLANE_CERTIFICATES: ${{ secrets.URL_TO_FASTLANE_CERTIFICATES }}
-          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-          BRANCH_OF_FASTLANE_CERTIFICATES: master
           CI: true
           CI_KEYCHAIN_NAME: "CI_KEYCHAIN"
           CI_KEYCHAIN_PASSWORD: ${{ secrets.CI_KEYCHAIN_PASSWORD }}

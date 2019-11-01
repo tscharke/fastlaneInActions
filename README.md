@@ -107,7 +107,7 @@ If the process finnished it stored all newly created certificates & provisioning
 
 ## Create a dotfile with personal Apple-Account-Credentials
 
-If you've checkout this repository you'll find already a [Matchfile](./fastlane/Matchfile) inside the [fastlane folder](./fastlane). This `Matchfile` provides some information for fastlane. Which kind of information and more you can read in [fastlane's docs for `match`](https://docs.fastlane.tools/actions/match).
+If you've checkout this repository you'll find already a [Matchfile](fastlane/__Matchfile) inside the [fastlane folder](./fastlane). This `Matchfile` provides some information for fastlane. Which kind of information and more you can read in [fastlane's docs for `match`](https://docs.fastlane.tools/actions/match).
 
 Relevant for now is that our `Matchfile` uses a lot of environment variables we've to set (e.g. the `APP_IDENTIFIER`).
 
