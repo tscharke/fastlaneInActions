@@ -29,22 +29,24 @@ platform :ios do
     )
   end
 
-  private_lane :build do
+  # This private lane is serves as a kind of backup to describe the steps to build an app only
+  private_lane :build_only do
     # Run lane 'ci_certificates' or 'certificates' depends on the system we’re using
     ENV['CI'] ? ci_certificates : certificates
 
+    # Install a required pod-files
     cocoapods(
       repo_update: true,
       podfile: "./ios/Podfile"
     )
 
-    # Build the MyAwesomeProject
+    # Build the MyAwesomeProject and store the results in ./fastlane/builds/
     gym(
       scheme: 'MyAwesomeProject',
       workspace: './ios/MyAwesomeProject.xcworkspace',
       silent: true,
       clean: true,
-      configuration: 'Development',
+      configuration: 'Release',
       output_directory: './fastlane/builds/',
       output_name: 'MyAwesomeProject.ipa',
       export_options: {
@@ -56,8 +58,43 @@ platform :ios do
     )
   end
 
+  private_lane :build_and_ship do
+    match(
+      # appstore, adhoc, development (default), enterprise
+      type: 'appstore',
+      readonly: true,
+      shallow_clone: true,
+      verbose: false,
+      clone_branch_directly: true,
+    )
+
+    gym(
+        scheme: 'MyAwesomeProject',
+        workspace: './ios/MyAwesomeProject.xcworkspace',
+        silent: true,
+        clean: true,
+        configuration: 'Development',
+        output_directory: './fastlane/builds/',
+        output_name: 'MyAwesomeProject.ipa',
+        export_options: {
+            method: "app-store",
+            provisioningProfiles: {
+                ENV['APP_IDENTIFIER'] => ENV["sigh_#{ENV['APP_IDENTIFIER']}_#{ENV['MATCH_TYPE']}_profile-name"],
+            }
+        },
+    )
+
+    pilot(
+      ipa: './fastlane/builds/MyAwesomeProject.ipa',
+      skip_waiting_for_build_processing: true,
+      verbose: true,
+      username: ENV['APPLE_ID'],
+      notify_external_testers: false,
+      team_id: ENV['APPLE_TEAM_ID'],
+    )
+  end
 
   lane :buildAndShip do
-    build
+    build_and_ship
   end
 end
