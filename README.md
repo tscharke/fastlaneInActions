@@ -109,29 +109,29 @@ If the process finnished it stored all newly created certificates & provisioning
 
 If you've checkout this repository you'll find already a [Matchfile](fastlane/__Matchfile) inside the [fastlane folder](./fastlane). This `Matchfile` provides some information for fastlane. Which kind of information and more you can read in [fastlane's docs for `match`](https://docs.fastlane.tools/actions/match).
 
-Relevant for now is that our `Matchfile` uses a lot of environment variables we've to set (e.g. the `APP_IDENTIFIER`).
+Relevant for now is that our `Matchfile` uses the environment variables to set…
 
-To make our life easier we will set all environment variables via a **Dotfile** with name `.env.development`. You can do it by running this bash command (replace the placeholder with your own values) inside the folder in which you checked out this repository:
+- `URL_TO_FASTLANE_CERTIFICATES_REPO` and
+- `APP_IDENTIFIER`.
+
+To make our life easier we will set this environment variables via a **Dotfile** with name `.env`. You can do it by running this bash command (replace the placeholder with your own values) inside the folder in which you checked out this repository:
 
 ```bash
-cat <<EOF >> ./fastlane/.env.development
+cat <<EOF >> ./fastlane/.env
 APP_IDENTIFIER=de.dermeer.van.fastlaneInActions
-APPLE_ID={ YOUR APPLE_ID }
-APPLE_TEAM_ID={ YOUR APPLE TEAM ID }
-URL_TO_FASTLANE_CERTIFICATES={ THE URL TO YOUR CERTIFICATION-REPOSITORY* }
-BRANCH_OF_FASTLANE_CERTIFICATES=master
+URL_TO_FASTLANE_CERTIFICATES_REPO={ THE URL TO YOUR CERTIFICATION-REPOSITORY* }
 EOF
 ```
 
 \* **IMPORTANT**: This is the **https**-url with **token**!!!
 
-This creats your personal Dotfile [./fastlane/.env.development](./fastlane/.env.development) and you can modified as you like and needed.
+This creats your personal Dotfile [./fastlane/.env](./fastlane/.env) and you can modified as you like and needed.
 
-Do **NOT checkin** this Dotfile. It's already listed in [gitignore](.gitignore#L58).
+Do **NOT checkin** this Dotfile. It's already listed in [gitignore](.gitignore#L57).
 
 ## Build app with fastlane
 
-At this point you're well prepared and we can build (and only build) the React-Native-App with fastlane by running the command `fastlane ios buildAndShip --env development` or simpler by running the script with yarn: `yarn deploy:ios:local`.
+At this point you're well prepared and we can build (and only build) the React-Native-App with fastlane by running the command `fastlane ios buildAndShip` or simpler by running the script with yarn: `yarn ios:buildAndShip`.
 
 If your setup was successful, at the end you will find an IPA-file and dSYM-file in folder [./fastlane/builds](./fastlane/builds).
 
@@ -162,7 +162,7 @@ Short what is being done here or better whats happend in our Workflows yml-file:
 3. Checkout the current repository.
 4. Install all dependencies (`yarn install`).
 5. Run all test (`yarn test`).
-6. Run `fastlane ios buildAndShip`.
+6. Run `fastlane` to build our React-Native-App (`yarn ios:buildAndShip`).
 
 If you wonder from where the `fastlane` comes? GithHub-Actions directly provided a `fastlane` for use (thanks to Jens N. for this tip 🙏). So it's not necessary to install `ruby` nor `gems`.
 
@@ -174,19 +174,25 @@ Feel free to clone this repository or simple copy the Workflows YML-File [.githu
 
 As you can see - inside the Workflows YML-File - that we're sharing following environment-variables to the CI-System:
 
-| Name                            | Value                              | Description                                                                            |
-| ------------------------------- | ---------------------------------- | -------------------------------------------------------------------------------------- |
-| APP_IDENTIFIER                  | `de.dermeer.van.fastlaneInActions` |                                                                                        |
-| APPLE_ID                        | **SECRET**                         | Your personal Apple Id                                                                 |
-| APPLE_TEAM_ID                   | **SECRET**                         | Your personal Apple Team-Id                                                            |
-| MATCH_TYPE                      | `development`                      | appstore, adhoc, enterprise or development                                             |  |
-| URL_TO_FASTLANE_CERTIFICATES    | **SECRET**                         | The **https**-url (with **token**) to your personal and private certificate repository |
-| MATCH_PASSWORD                  | **SECRET**                         | Password of your certificate repository                                                |
-| BRANCH_OF_FASTLANE_CERTIFICATES | master                             |                                                                                        |
-| CI                              | true                               |                                                                                        |
-| CI_KEYCHAIN_NAME                | `CI_KEYCHAIN`                      |                                                                                        |
-| CI_KEYCHAIN_PASSWORD            | **SECRET**                         | Password for the internal used keychain. You may bet on any value you like             |
+| Name                              | Value                              | Description                                                                            |
+| --------------------------------- | ---------------------------------- | -------------------------------------------------------------------------------------- |
+| APP_IDENTIFIER                    | `de.dermeer.van.fastlaneInActions` |                                                                                        |
+| URL_TO_FASTLANE_CERTIFICATES_REPO | **SECRET**                         | The **https**-url (with **token**) to your personal and private certificate repository |
+| MATCH_PASSWORD                    | **SECRET**                         | Password of your certificate repository                                                |
+| CI                                | true                               |                                                                                        |
+| CI_KEYCHAIN_NAME                  | `CI_KEYCHAIN`                      |                                                                                        |
+| CI_KEYCHAIN_PASSWORD              | **SECRET**                         | Password for the internal used keychain. You may bet on any value you like             |
 
 ### Set some secrets on your repository
 
-What is it with the **SECRET** marke values? This are values you **never share** public and they're needed on your repository too. So please provide this environment-variables as [GitHub-Secrets](https://help.github.com/en/github/automating-your-workflow-with-github-actions/virtual-environments-for-github-actions#creating-and-using-secrets-encrypted-variables) on your own repository.
+What is it with the **SECRET** marke values?
+
+This are values you **never share** public and they're needed on your repository too. So please provide this environment-variables as [GitHub-Secrets](https://help.github.com/en/github/automating-your-workflow-with-github-actions/virtual-environments-for-github-actions#creating-and-using-secrets-encrypted-variables) on your own repository.
+
+#### Names of secrets to set on your repository
+
+- URL_TO_FASTLANE_CERTIFICATES_REPO\*
+- MATCH_PASSWORD
+- CI_KEYCHAIN_PASSWORD
+
+\* This is the **https**-url with **token**!!!
