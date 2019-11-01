@@ -25,6 +25,7 @@ I'm trying to document my way to get this goal here.
   - [Where is the magic](#Where-is-the-magic)
   - [Using this with your own repository](#Using-this-with-your-own-repository)
     - [Set some secrets on your repository](#Set-some-secrets-on-your-repository)
+    - [Names of secrets to set on your repository](#Names-of-secrets-to-set-on-your-repository)
 
 # Prerequisites
 
@@ -189,7 +190,7 @@ What is it with the **SECRET** marke values?
 
 This are values you **never share** public and they're needed on your repository too. So please provide this environment-variables as [GitHub-Secrets](https://help.github.com/en/github/automating-your-workflow-with-github-actions/virtual-environments-for-github-actions#creating-and-using-secrets-encrypted-variables) on your own repository.
 
-#### Names of secrets to set on your repository
+### Names of secrets to set on your repository
 
 - URL_TO_FASTLANE_CERTIFICATES_REPO\*
 - MATCH_PASSWORD
