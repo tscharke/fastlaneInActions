@@ -1,38 +1,76 @@
+# Global variables to simplify the individual adjustment
+PROJECT_NAME = "MyAwesomeProject"
+XCODE_PROJECT_PATH = "./ios/#{PROJECT_NAME}.xcodeproj"
+XCODE_WORKSPACE_PATH = "./ios/#{PROJECT_NAME}.xcworkspace"
+OUTPUT_DIRECTORY = "./fastlane/builds/"
+
 opt_out_usage
 
 platform :ios do
-  private_lane :ci_certificates do
-    create_keychain(
-      name: ENV['CI_KEYCHAIN_NAME'],
-      password: ENV['CI_KEYCHAIN_PASSWORD'],
-      default_keychain: true,
-      unlock: true,
-      timeout: 3600,
-      lock_when_sleeps: false
-    )
-    match(
-      keychain_name: ENV['CI_KEYCHAIN_NAME'],
-      keychain_password: ENV['CI_KEYCHAIN_PASSWORD'],
-      readonly: true,
-      shallow_clone: true,
-      verbose: false,
-      clone_branch_directly: true,
-    )
+  before_all do
+    ensure_git_status_clean
   end
 
-  private_lane :certificates do
-    match(
-      readonly: true,
-      shallow_clone: true,
-      verbose: false,
-      clone_branch_directly: true,
+  private_lane :commitAndPush do
+    commit_version_bump(
+      xcodeproj: XCODE_PROJECT_PATH,
     )
+
+    push_to_git_remote
   end
 
-  # This private lane is serves as a kind of backup to describe the steps to build an app only
-  private_lane :build_only do
-    # Run lane 'ci_certificates' or 'certificates' depends on the system we’re using
-    ENV['CI'] ? ci_certificates : certificates
+  # Private lane with the following required `values`:
+  #   ci         = true | false
+  #   match_type = appstore | adhoc | development | enterprise
+  private_lane :certificates do | values |
+    ci = values[:ci]
+    match_type = values[:match_type]
+
+    if ci
+      create_keychain(
+        name: ENV["CI_KEYCHAIN_NAME"],
+        password: ENV["CI_KEYCHAIN_PASSWORD"],
+        default_keychain: true,
+        unlock: true,
+        timeout: 3600,
+        lock_when_sleeps: false
+      )
+      match(
+        type: match_type,
+        keychain_name: ENV["CI_KEYCHAIN_NAME"],
+        keychain_password: ENV["CI_KEYCHAIN_PASSWORD"],
+        readonly: true,
+        shallow_clone: true,
+        verbose: false,
+        clone_branch_directly: true,
+      )
+    else
+      match(
+        type: match_type,
+        readonly: true,
+        shallow_clone: true,
+        verbose: false,
+        clone_branch_directly: true,
+      )
+    end
+
+  end
+
+  # Private lane with the following required `values`:
+  #   ci         = true | false
+  #   build_only = true | false
+  private_lane :build_and_ship do | values |
+    # Set variables depending on the requirements
+    build_only = values[:build_only]
+    ci = values[:ci]
+    configuration_name = build_only ? "Development" : "Release"
+    export_options_method = build_only ? "development" : "app-store"
+    match_type = build_only ? "development" : "appstore"
+
+    certificates(
+      ci: ci,
+      match_type: match_type,
+    )
 
     # Install a required pod-files
     cocoapods(
@@ -40,61 +78,48 @@ platform :ios do
       podfile: "./ios/Podfile"
     )
 
-    # Build the MyAwesomeProject and store the results in ./fastlane/builds/
+    increment_build_number(
+      xcodeproj: XCODE_PROJECT_PATH
+    )
+
+    # Build the project and store the results in the output folder
     gym(
-      scheme: 'MyAwesomeProject',
-      workspace: './ios/MyAwesomeProject.xcworkspace',
+      scheme: PROJECT_NAME,
+      workspace: XCODE_WORKSPACE_PATH,
       silent: true,
       clean: true,
-      configuration: 'Release',
-      output_directory: './fastlane/builds/',
-      output_name: 'MyAwesomeProject.ipa',
+      configuration: configuration_name,
+      output_directory: OUTPUT_DIRECTORY,
+      output_name: "#{PROJECT_NAME}.ipa",
       export_options: {
-          method: "development",
-          provisioningProfiles: {
-              ENV['APP_IDENTIFIER'] => ENV["sigh_#{ENV['APP_IDENTIFIER']}_#{ENV['MATCH_TYPE']}_profile-name"],
-          }
+        method: export_options_method,
+        provisioningProfiles: {
+          ENV["APP_IDENTIFIER"] => ENV["sigh_#{ENV["APP_IDENTIFIER"]}_#{ENV["MATCH_TYPE"]}_profile-name"],
+        }
       },
     )
-  end
 
-  private_lane :build_and_ship do
-    match(
-      # appstore, adhoc, development (default), enterprise
-      type: 'appstore',
-      readonly: true,
-      shallow_clone: true,
-      verbose: false,
-      clone_branch_directly: true,
-    )
+    unless build_only
+      pilot(
+        ipa: "#{OUTPUT_DIRECTORY}#{PROJECT_NAME}.ipa",
+        skip_waiting_for_build_processing: true,
+        verbose: false,
+        uses_non_exempt_encryption: true,
+        notify_external_testers: false,
+        username: ENV["APPLE_ID"],
+        team_id: ENV["APPLE_TEAM_ID"],
+        apple_id: ENV["APPLE_APP_ID"],
+        itc_provider: ENV["sigh_#{ENV["APP_IDENTIFIER"]}_#{ENV["MATCH_TYPE"]}_team-id"],
+      )
+    end
 
-    gym(
-        scheme: 'MyAwesomeProject',
-        workspace: './ios/MyAwesomeProject.xcworkspace',
-        silent: true,
-        clean: true,
-        configuration: 'Development',
-        output_directory: './fastlane/builds/',
-        output_name: 'MyAwesomeProject.ipa',
-        export_options: {
-            method: "app-store",
-            provisioningProfiles: {
-                ENV['APP_IDENTIFIER'] => ENV["sigh_#{ENV['APP_IDENTIFIER']}_#{ENV['MATCH_TYPE']}_profile-name"],
-            }
-        },
-    )
-
-    pilot(
-      ipa: './fastlane/builds/MyAwesomeProject.ipa',
-      skip_waiting_for_build_processing: true,
-      verbose: true,
-      username: ENV['APPLE_ID'],
-      notify_external_testers: false,
-      team_id: ENV['APPLE_TEAM_ID'],
-    )
+    commitAndPush
   end
 
   lane :buildAndShip do
-    build_and_ship
+    build_and_ship(
+      ci: ENV["CI"] || false,
+      build_only: false,
+    )
   end
 end
