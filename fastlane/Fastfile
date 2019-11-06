@@ -14,6 +14,7 @@ platform :ios do
   private_lane :commitAndPush do
     commit_version_bump(
       xcodeproj: XCODE_PROJECT_PATH,
+      include: ["ios/Podfile.lock"],
     )
 
     push_to_git_remote
