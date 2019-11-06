@@ -94,7 +94,7 @@ platform :ios do
       export_options: {
         method: export_options_method,
         provisioningProfiles: {
-          ENV["APP_IDENTIFIER"] => ENV["sigh_#{ENV["APP_IDENTIFIER"]}_#{ENV["MATCH_TYPE"]}_profile-name"],
+          ENV["APP_IDENTIFIER"] => ENV["sigh_#{ENV["APP_IDENTIFIER"]}_#{match_type}_profile-name"],
         }
       },
     )
@@ -109,7 +109,7 @@ platform :ios do
         username: ENV["APPLE_ID"],
         team_id: ENV["APPLE_TEAM_ID"],
         apple_id: ENV["APPLE_APP_ID"],
-        itc_provider: ENV["sigh_#{ENV["APP_IDENTIFIER"]}_#{ENV["MATCH_TYPE"]}_team-id"],
+        itc_provider: ENV["sigh_#{ENV["APP_IDENTIFIER"]}_#{match_type}_team-id"],
       )
     end
 
