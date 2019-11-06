@@ -18,7 +18,6 @@ jobs:
       - name: Install dependencies, test and build React-Native-App
         run: |
           yarn install
-          yarn test
           yarn ios:buildAndShip
         env:
           APP_IDENTIFIER: de.dermeer.van.fastlaneInActions
