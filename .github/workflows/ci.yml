@@ -23,6 +23,7 @@ jobs:
           APP_IDENTIFIER: de.dermeer.van.fastlaneInActions
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_APP_ID: ${{ secrets.APPLE_APP_ID }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
           URL_TO_FASTLANE_CERTIFICATES_REPO: ${{ secrets.URL_TO_FASTLANE_CERTIFICATES_REPO }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
           FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
