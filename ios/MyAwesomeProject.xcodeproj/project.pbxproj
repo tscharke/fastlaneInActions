@@ -654,7 +654,7 @@
 			baseConfigurationReference = BFFD8A0DE93CBE85C3E574CB /* Pods-MyAwesomeProject.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_TEAM = AB9U67QJ4F;
@@ -667,7 +667,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = de.dermeer.van.fastlaneInActions;
 				PRODUCT_NAME = MyAwesomeProject;
-				PROVISIONING_PROFILE_SPECIFIER = "match Development de.dermeer.van.fastlaneInActions";
+				PROVISIONING_PROFILE_SPECIFIER = "match AppStore de.dermeer.van.fastlaneInActions";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
