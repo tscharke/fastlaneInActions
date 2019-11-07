@@ -31,8 +31,8 @@ jobs:
           CI_KEYCHAIN_NAME: "CI_KEYCHAIN"
           CI_KEYCHAIN_PASSWORD: ${{ secrets.CI_KEYCHAIN_PASSWORD }}
       - name: Fastlane
+        run: |
+          cd ios
+          fastlane ios buildAndShip
         env:
           BRANCH_NAME: ${GITHUB_REF##*/}
-          run: |
-            cd ios
-            fastlane ios buildAndShip
