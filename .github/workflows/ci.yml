@@ -18,7 +18,7 @@ jobs:
       - name: Install dependencies, test and build React-Native-App
         run: |
           yarn install
-          yarn ios:buildAndShip
+          yarn test
         env:
           APP_IDENTIFIER: de.dermeer.van.fastlaneInActions
           APPLE_ID: ${{ secrets.APPLE_ID }}
@@ -33,3 +33,6 @@ jobs:
       - name: Fastlane
         env:
           BRANCH_NAME: ${GITHUB_REF##*/}
+          run: |
+            cd ios
+            fastlane ios buildAndShip
