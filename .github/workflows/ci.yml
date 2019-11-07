@@ -15,7 +15,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - uses: actions/checkout@v1
-      - name: Install dependencies, test and build React-Native-App
+      - name: Install dependencies and run tests
         run: |
           yarn install
           yarn test
@@ -30,9 +30,8 @@ jobs:
           CI: true
           CI_KEYCHAIN_NAME: "CI_KEYCHAIN"
           CI_KEYCHAIN_PASSWORD: ${{ secrets.CI_KEYCHAIN_PASSWORD }}
-      - name: Fastlane
+      - name: Build and ship React-Native-App to Stores
         run: |
-          cd ios
           fastlane ios buildAndShip
         env:
           BRANCH_NAME: ${GITHUB_REF##*/}
