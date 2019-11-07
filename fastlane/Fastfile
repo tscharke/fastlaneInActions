@@ -65,13 +65,15 @@ platform :ios do
   # Private lane with the following required `values`:
   #   ci         = true | false
   #   build_only = true | false
+  #   type       = development | release
   private_lane :build_and_ship do | values |
     # Set variables depending on the requirements
     build_only = values[:build_only]
     ci = values[:ci]
-    configuration_name = build_only ? "Development" : "Release"
-    export_options_method = build_only ? "development" : "app-store"
-    match_type = build_only ? "development" : "appstore"
+    is_build_for_dev = values[:type] == "development"
+    configuration_name = is_build_for_dev ? "Development" : "Release"
+    export_options_method = is_build_for_dev ? "development" : "app-store"
+    match_type = is_build_for_dev ? "development" : "appstore"
 
     certificates(
       ci: ci,
@@ -127,6 +129,7 @@ platform :ios do
     build_and_ship(
       ci: ENV["CI"] || false,
       build_only: true,
+      type: "release",
     )
   end
 end
