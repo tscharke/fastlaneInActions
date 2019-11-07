@@ -126,7 +126,7 @@ platform :ios do
   lane :buildAndShip do
     build_and_ship(
       ci: ENV["CI"] || false,
-      build_only: false,
+      build_only: true,
     )
   end
 end
