@@ -15,13 +15,11 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - uses: actions/checkout@v1
-      - name: Install dependencies and run tests
+      - name: Install dependencies, run tests and build & ship React-Native-App to Stores
         run: |
           yarn install
           yarn test
-      - name: Build and ship React-Native-App to Stores
-        run: |
-          fastlane ios buildAndShip
+          yarn ios:buildAndShip
         env:
           APP_IDENTIFIER: de.dermeer.van.fastlaneInActions
           APPLE_ID: ${{ secrets.APPLE_ID }}
@@ -33,4 +31,4 @@ jobs:
           CI: true
           CI_KEYCHAIN_NAME: "CI_KEYCHAIN"
           CI_KEYCHAIN_PASSWORD: ${{ secrets.CI_KEYCHAIN_PASSWORD }}
-          BRANCH_NAME: ${GITHUB_REF##*/}
+          BRANCH_NAME: "ship-ios"
