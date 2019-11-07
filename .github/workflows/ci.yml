@@ -21,7 +21,7 @@ jobs:
       - name: Run tests
         run: |
           yarn test
-      - name: Build and ship React-Native-App
+      - name: Build and ship
         run: |
           yarn ios:buildAndShip
         env:
@@ -35,4 +35,4 @@ jobs:
           CI: true
           CI_KEYCHAIN_NAME: "CI_KEYCHAIN"
           CI_KEYCHAIN_PASSWORD: ${{ secrets.CI_KEYCHAIN_PASSWORD }}
-          BRANCH_NAME: "ship-ios"
+          BRANCH_NAME: ${GITHUB_REF}
