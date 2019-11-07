@@ -30,4 +30,6 @@ jobs:
           CI: true
           CI_KEYCHAIN_NAME: "CI_KEYCHAIN"
           CI_KEYCHAIN_PASSWORD: ${{ secrets.CI_KEYCHAIN_PASSWORD }}
+      - name: Fastlane
+        env:
           BRANCH_NAME: ${GITHUB_REF##*/}
