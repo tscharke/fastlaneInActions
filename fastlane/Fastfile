@@ -87,7 +87,7 @@ platform :ios do
 
     increment_build_number(
       xcodeproj: XCODE_PROJECT_PATH,
-      build_number: 13,
+      build_number: 14,
     )
 
     # Build the project and store the results in the output folder

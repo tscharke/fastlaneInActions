@@ -15,10 +15,14 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - uses: actions/checkout@v1
-      - name: Install dependencies, run tests and build & ship React-Native-App to Stores
+      - name: Install dependencies
         run: |
           yarn install
+      - name: Run tests
+        run: |
           yarn test
+      - name: Build and ship React-Native-App
+        run: |
           yarn ios:buildAndShip
         env:
           APP_IDENTIFIER: de.dermeer.van.fastlaneInActions
