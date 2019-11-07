@@ -17,7 +17,12 @@ platform :ios do
       include: ["ios/Podfile.lock"],
     )
 
-    push_to_git_remote
+    puts "****************************************"
+    puts ENV['BRANCH_NAME']
+    puts "****************************************"
+    push_to_git_remote(
+      local_branch: ENV["BRANCH_NAME"],
+    )
   end
 
   # Private lane with the following required `values`:
@@ -81,7 +86,7 @@ platform :ios do
 
     increment_build_number(
       xcodeproj: XCODE_PROJECT_PATH,
-      build_number: 11,
+      build_number: 12,
     )
 
     # Build the project and store the results in the output folder
