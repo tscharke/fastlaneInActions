@@ -19,6 +19,9 @@ jobs:
         run: |
           yarn install
           yarn test
+      - name: Build and ship React-Native-App to Stores
+        run: |
+          fastlane ios buildAndShip
         env:
           APP_IDENTIFIER: de.dermeer.van.fastlaneInActions
           APPLE_ID: ${{ secrets.APPLE_ID }}
@@ -30,8 +33,4 @@ jobs:
           CI: true
           CI_KEYCHAIN_NAME: "CI_KEYCHAIN"
           CI_KEYCHAIN_PASSWORD: ${{ secrets.CI_KEYCHAIN_PASSWORD }}
-      - name: Build and ship React-Native-App to Stores
-        run: |
-          fastlane ios buildAndShip
-        env:
           BRANCH_NAME: ${GITHUB_REF##*/}
