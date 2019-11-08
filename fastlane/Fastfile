@@ -22,7 +22,7 @@ platform :ios do
     puts "#{options[:git_branch_name]}"
     puts "************************************"
 
-    sh("git", "push", "origin", "HEAD", options[:git_branch_name])
+    sh("git", "push", "origin", "refs/heads/ship-ios:refs/heads/ship-ios")
     # push_to_git_remote(
     #   local_branch: options[:git_branch_name],
     # )
