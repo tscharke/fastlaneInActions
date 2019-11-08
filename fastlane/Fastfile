@@ -1,8 +1,11 @@
 # Global variables to simplify the individual adjustment
 PROJECT_NAME = "MyAwesomeProject"
-XCODE_PROJECT_PATH = "./ios/#{PROJECT_NAME}.xcodeproj"
-XCODE_WORKSPACE_PATH = "./ios/#{PROJECT_NAME}.xcworkspace"
+XCODE_PROJECT = "./ios/#{PROJECT_NAME}.xcodeproj"
+XCODE_WORKSPACE = "./ios/#{PROJECT_NAME}.xcworkspace"
 OUTPUT_DIRECTORY = "./fastlane/builds/"
+PODFILE = "ios/Podfile"
+PODFILE_LOCK = "ios/Podfile.lock"
+BUILD_TYPE = "release" # development | release
 
 opt_out_usage
 
@@ -11,29 +14,25 @@ platform :ios do
     ensure_git_status_clean
   end
 
-  private_lane :commitAndPush do
+  private_lane :commitAndPush do | options |
     commit_version_bump(
-      xcodeproj: XCODE_PROJECT_PATH,
-      include: ["ios/Podfile.lock"],
+      xcodeproj: XCODE_PROJECT,
+      include: [PODFILE_LOCK],
     )
 
-    const branch_name = ENV["GITHUB.HEAD_REF"]
     puts "****************************************"
-    puts "1. #{branch_name}"
+    puts "#{options[:branch_name]}"
     puts "****************************************"
     push_to_git_remote(
-      local_branch: branch_name,
+      local_branch: options[:branch_name],
     )
   end
 
-  # Private lane with the following required `values`:
-  #   ci         = true | false
-  #   match_type = appstore | adhoc | development | enterprise
-  private_lane :certificates do | values |
-    ci = values[:ci]
-    match_type = values[:match_type]
+  private_lane :certificates do | options |
+    running_on_ci = options[:running_on_ci]
+    match_type = options[:match_type]
 
-    if ci
+    if running_on_ci
       create_keychain(
         name: ENV["CI_KEYCHAIN_NAME"],
         password: ENV["CI_KEYCHAIN_PASSWORD"],
@@ -63,74 +62,71 @@ platform :ios do
 
   end
 
-  # Private lane with the following required `values`:
-  #   ci         = true | false
-  #   build_only = true | false
-  #   type       = development | release
-  private_lane :build_and_ship do | values |
-    # Set variables depending on the requirements
-    build_only = values[:build_only]
-    ci = values[:ci]
-    is_build_for_dev = values[:type] == "development"
-    configuration_name = is_build_for_dev ? "Development" : "Release"
-    export_options_method = is_build_for_dev ? "development" : "app-store"
-    match_type = is_build_for_dev ? "development" : "appstore"
+  private_lane :build do | options |
+    certificates(options)
 
-    certificates(
-      ci: ci,
-      match_type: match_type,
-    )
-
-    # Install a required pod-files
     cocoapods(
       repo_update: true,
-      podfile: "./ios/Podfile"
+      podfile: PODFILE,
     )
 
     increment_build_number(
-      xcodeproj: XCODE_PROJECT_PATH,
+      xcodeproj: XCODE_PROJECT,
       build_number: 15,
     )
 
-    # Build the project and store the results in the output folder
     gym(
       scheme: PROJECT_NAME,
-      workspace: XCODE_WORKSPACE_PATH,
+      workspace: XCODE_WORKSPACE,
       silent: true,
       clean: true,
-      configuration: configuration_name,
+      configuration: options[:configuration_name],
       output_directory: OUTPUT_DIRECTORY,
       output_name: "#{PROJECT_NAME}.ipa",
       export_options: {
-        method: export_options_method,
+        method: options[:export_options_method],
         provisioningProfiles: {
-          ENV["APP_IDENTIFIER"] => ENV["sigh_#{ENV["APP_IDENTIFIER"]}_#{match_type}_profile-name"],
+          options[:app_identifier] => ENV["sigh_#{options[:app_identifier]}_#{options[:match_type]}_profile-name"],
         }
       },
     )
+  end
 
-    unless build_only
-      pilot(
-        ipa: "#{OUTPUT_DIRECTORY}#{PROJECT_NAME}.ipa",
-        skip_waiting_for_build_processing: true,
-        verbose: false,
-        uses_non_exempt_encryption: true,
-        notify_external_testers: false,
-        username: ENV["APPLE_ID"],
-        team_id: ENV["APPLE_TEAM_ID"],
-        apple_id: ENV["APPLE_APP_ID"],
-        itc_provider: ENV["sigh_#{ENV["APP_IDENTIFIER"]}_#{match_type}_team-id"],
-      )
-    end
-
-    commitAndPush
+  private_lane :ship do | options |
+    pilot(
+      ipa: "#{OUTPUT_DIRECTORY}#{PROJECT_NAME}.ipa",
+      skip_waiting_for_build_processing: true,
+      verbose: false,
+      uses_non_exempt_encryption: true,
+      notify_external_testers: false,
+      username: options[:apple_id],
+      team_id: options[:apple_team_id],
+      apple_id: options[:apple_app_id],
+      itc_provider: ENV["sigh_#{options[:app_identifier]}_#{options[:match_type]}_team-id"],
+    )
   end
 
   lane :buildAndShip do
-    build_and_ship(
-      ci: ENV["CI"] || false,
-      build_only: true,
-      type: "release",
-    )
+    is_build_for_dev = BUILD_TYPE == "development"
+    options = {
+      :running_on_ci => ENV["CI"] || false,
+      :build_only => true,
+      :apple_id => ENV["APPLE_ID"],
+      :apple_team_id => ENV["APPLE_TEAM_ID"],
+      :apple_app_id =>  ENV["APPLE_APP_ID"],
+      :app_identifier => ENV["APP_IDENTIFIER"],
+      :match_type => is_build_for_dev ? "development" : "appstore",
+      :configuration_name => is_build_for_dev ? "Development" : "Release",
+      :export_options_method => is_build_for_dev ? "development" : "app-store",
+      :branch_name => ENV["GITHUB.HEAD_REF"],
+    }
+
+    build(options)
+
+    unless build_only
+      ship(options)
+    end
+
+    commitAndPush(options)
   end
 end
