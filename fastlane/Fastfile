@@ -12,18 +12,19 @@ platform :ios do
     ensure_git_status_clean
   end
 
-  private_lane :commitAndPush do
+  # Private lane with the following required `options`:
+  #   - branch_name
+  private_lane :commitAndPush do | options |
     commit_version_bump(
       xcodeproj: XCODE_PROJECT,
       include: ["ios/Podfile.lock"],
     )
 
-    branch_name = ENV["GITHUB.HEAD_REF"]
     puts "****************************************"
-    puts "1. #{branch_name}"
+    puts "1. #{options[:branch_name]}"
     puts "****************************************"
     push_to_git_remote(
-      local_branch: branch_name,
+      local_branch: options[:branch_name],
     )
   end
 
@@ -126,9 +127,14 @@ platform :ios do
   end
 
   lane :buildAndShip do
-    build_and_ship(
-      ci: ENV["CI"] || false,
-      build_only: true,
+    running_on_ci = ENV["CI"] || false
+    # build_and_ship(
+    #   ci: ENV["CI"] || false,
+    #   build_only: true,
+    # )
+
+    commitAndPush(
+      branch_name: running_on_ci ? ENV["GITHUB.REF"] : "xxx",
     )
   end
 end
