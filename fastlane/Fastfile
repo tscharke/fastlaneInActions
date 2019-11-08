@@ -116,7 +116,7 @@ platform :ios do
 
   lane :buildAndShip do
     commitAndPush(
-      git_branch_name: "refs/heads/ship-ios",
+      git_branch_name: ENV['GIT_BRANCH_NAME'],
     )
   end
 
