@@ -19,10 +19,10 @@ platform :ios do
     )
 
     puts "****************************************"
-    puts "1. #{ENV["GITHUB.HEAD_REF"]}"
+    puts "1. #{ENV["BRANCH_NAME"]}"
     puts "****************************************"
     push_to_git_remote(
-      local_branch: ENV["GITHUB.HEAD_REF"],
+      local_branch: ENV["BRANCH_NAME"],
     )
   end
 
