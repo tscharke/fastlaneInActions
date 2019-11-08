@@ -8,7 +8,7 @@
     "start": "react-native start",
     "test": "jest",
     "ios:app": "react-native run-ios",
-    "ios:buildAndShip": "fastlane ios buildAndShip"
+    "ios:buildAndShip": "fastlane ios buildAndShip --capture_output"
   },
   "dependencies": {
     "react": "16.9.0",
