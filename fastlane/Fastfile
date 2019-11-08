@@ -19,7 +19,9 @@ platform :ios do
       include: ["ios/Podfile.lock"],
     )
 
-    push_to_git_remote
+    push_to_git_remote(
+      local_branch: options[:git_branch_name],
+    )
   end
 
   private_lane :certificates do | options |
