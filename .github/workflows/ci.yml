@@ -35,4 +35,3 @@ jobs:
           CI: true
           CI_KEYCHAIN_NAME: "CI_KEYCHAIN"
           CI_KEYCHAIN_PASSWORD: ${{ secrets.CI_KEYCHAIN_PASSWORD }}
-          BRANCH_NAME: ${{ github.head_ref }}

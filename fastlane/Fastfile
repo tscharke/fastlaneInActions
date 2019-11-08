@@ -17,11 +17,12 @@ platform :ios do
       include: ["ios/Podfile.lock"],
     )
 
+    const branch_name = ENV["GITHUB.HEAD_REF"]
     puts "****************************************"
-    puts "1. #{ENV["BRANCH_NAME"]}"
+    puts "1. #{branch_name}"
     puts "****************************************"
     push_to_git_remote(
-      local_branch: ENV["BRANCH_NAME"],
+      local_branch: branch_name,
     )
   end
 
