@@ -133,6 +133,11 @@ platform :ios do
     #   build_only: true,
     # )
 
+    increment_build_number(
+        xcodeproj: XCODE_PROJECT,
+        build_number: 15,
+        )
+
     commitAndPush(
       branch_name: running_on_ci ? ENV["GITHUB.REF"] : "xxx",
     )
