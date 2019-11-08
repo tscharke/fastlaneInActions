@@ -93,7 +93,7 @@ platform :ios do
       },
     )
 
-    return match_type
+    match_type
   end
 
   private_lane :ship do | options |
