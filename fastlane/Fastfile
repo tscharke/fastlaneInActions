@@ -1,3 +1,5 @@
+opt_out_usage
+
 # Global variables to simplify the individual adjustment
 PROJECT_NAME = "MyAwesomeProject"
 XCODE_PROJECT = "./ios/#{PROJECT_NAME}.xcodeproj"
@@ -5,11 +7,14 @@ XCODE_WORKSPACE = "./ios/#{PROJECT_NAME}.xcworkspace"
 OUTPUT_DIRECTORY = "./fastlane/builds/"
 BUILD_FOR_DEVELOPMENT_ONLY = false # true = Build for Development | false = Build to create a release
 
-opt_out_usage
+OPTIONS = {
+  :running_on_ci => ENV["CI"] || false,
+  :git_branch_name => OPTIONS[:running_on_ci] ? ENV['GIT_BRANCH_NAME'] : sh("git", "rev-parse", "--abbrev-ref", "HEAD"),
+}
 
 platform :ios do
   before_all do
-    ensure_git_status_clean
+    # ensure_git_status_clean
   end
 
   # Private lane with the following required `options`:
@@ -124,15 +129,13 @@ platform :ios do
   end
 
   lane :buildAndShip do
-    running_on_ci = ENV["CI"] || false
     # build_and_ship(
     #   ci: ENV["CI"] || false,
     #   build_only: true,
     # )
 
-    branch_name = ENV['GIT_BRANCH_NAME'] # running_on_ci ? ENV["github.head_ref"] : sh("git", "rev-parse", "--abbrev-ref", "HEAD")
     puts "************************"
-    puts "xxxx: #{branch_name}"
+    puts "xxxx: #{OPTIONS[:git_branch_name]}"
     puts "************************"
 
     # commitAndPush(
