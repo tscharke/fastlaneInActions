@@ -22,7 +22,6 @@ platform :ios do
     puts "****************************************"
     push_to_git_remote(
       local_branch: ENV["BRANCH_NAME"],
-      remote_branch: ENV["BRANCH_NAME"],
     )
   end
 
