@@ -22,11 +22,7 @@ platform :ios do
     puts "#{options[:git_branch_name]}"
     puts "************************************"
 
-    sh "git show-ref"
-    push_to_git_remote(
-      local_branch: options[:git_branch_name],
-      set_upstream: true,
-    )
+    push_to_git_remote
   end
 
   private_lane :certificates do | options |
