@@ -35,4 +35,4 @@ jobs:
           CI: true
           CI_KEYCHAIN_NAME: "CI_KEYCHAIN"
           CI_KEYCHAIN_PASSWORD: ${{ secrets.CI_KEYCHAIN_PASSWORD }}
-          GIT_BRANCH_NAME: "refs/remotes/origin/ship-ios"
+          GIT_BRANCH_NAME: "ship-ios"

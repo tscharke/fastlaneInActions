@@ -22,9 +22,10 @@ platform :ios do
     puts "#{options[:git_branch_name]}"
     puts "************************************"
 
-    push_to_git_remote(
-      local_branch: options[:git_branch_name],
-    )
+    sh("git", "push", "origin", "HEAD", options[:git_branch_name])
+    # push_to_git_remote(
+    #   local_branch: options[:git_branch_name],
+    # )
   end
 
   private_lane :certificates do | options |
