@@ -130,7 +130,7 @@ platform :ios do
     #   build_only: true,
     # )
 
-    branch_name = running_on_ci ? ENV["GITHUB.HEAD_REF"] : sh("git", "rev-parse", "--abbrev-ref", "HEAD")
+    branch_name = running_on_ci ? ENV["github.head_ref"] : sh("git", "rev-parse", "--abbrev-ref", "HEAD")
     puts "************************"
     puts "#{branch_name}"
     puts "************************"
