@@ -23,10 +23,10 @@ platform :ios do
     puts "************************************"
 
     sh "git show-ref"
-    sh("git", "push", "origin", "refs/remotes/origin/ship-ios:refs/remotes/origin/ship-ios")
-    # push_to_git_remote(
-    #   local_branch: options[:git_branch_name],
-    # )
+    push_to_git_remote(
+      local_branch: options[:git_branch_name],
+      set_upstream: true,
+    )
   end
 
   private_lane :certificates do | options |
