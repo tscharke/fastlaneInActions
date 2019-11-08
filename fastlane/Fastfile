@@ -132,7 +132,7 @@ platform :ios do
 
     branch_name = ENV['GIT_BRANCH_NAME'] # running_on_ci ? ENV["github.head_ref"] : sh("git", "rev-parse", "--abbrev-ref", "HEAD")
     puts "************************"
-    puts "#{branch_name}"
+    puts "xxxx: #{branch_name}"
     puts "************************"
 
     # commitAndPush(
