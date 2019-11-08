@@ -13,10 +13,14 @@ platform :ios do
   end
 
   private_lane :commitAndPush do | options |
-    commit_version_bump(
-      xcodeproj: XCODE_PROJECT,
-      include: ["ios/Podfile.lock"],
-    )
+    # commit_version_bump(
+    #   xcodeproj: XCODE_PROJECT,
+    #   include: ["ios/Podfile.lock"],
+    # )
+
+    puts "************************************"
+    puts "#{options[:git_branch_name]}"
+    puts "************************************"
 
     push_to_git_remote(
       local_branch: options[:git_branch_name],
@@ -111,6 +115,12 @@ platform :ios do
   end
 
   lane :buildAndShip do
+    commitAndPush(
+      git_branch_name: "refs/heads/ship-ios",
+    )
+  end
+
+  lane :buildAndShip1 do
     running_on_ci = ENV["CI"] || false
     build_only = true
     options = {
