@@ -57,14 +57,13 @@ platform :ios do
   end
 
   private_lane :build_and_ship do | options |
-    build_only = options[:build_only]
-    running_on_ci = options[:running_on_ci]
-    configuration_name = build_only ? "Development" : "Release"
-    export_options_method = build_only ? "development" : "app-store"
-    match_type = build_only ? "development" : "appstore"
+    build_for_development_only = options[:build_for_development_only]
+    configuration_name = build_for_development_only ? "Development" : "Release"
+    export_options_method = build_for_development_only ? "development" : "app-store"
+    match_type = build_for_development_only ? "development" : "appstore"
 
     certificates(
-      ci: running_on_ci,
+      ci: options[:running_on_ci],
       match_type: match_type,
     )
 
@@ -94,25 +93,28 @@ platform :ios do
       },
     )
 
-    unless build_only
-      pilot(
-        ipa: "#{OUTPUT_DIRECTORY}#{PROJECT_NAME}.ipa",
-        skip_waiting_for_build_processing: true,
-        verbose: false,
-        uses_non_exempt_encryption: true,
-        notify_external_testers: false,
-        username: options[:apple_id],
-        team_id: options[:apple_team_id],
-        apple_id: options[:apple_app_id],
-        itc_provider: ENV["sigh_#{options[:app_identifier]}_#{match_type}_team-id"],
-      )
-    end
+    return match_type
+  end
+
+  private_lane :ship do | options |
+    pilot(
+      ipa: "#{OUTPUT_DIRECTORY}#{PROJECT_NAME}.ipa",
+      skip_waiting_for_build_processing: true,
+      verbose: false,
+      uses_non_exempt_encryption: true,
+      notify_external_testers: false,
+      username: options[:apple_id],
+      team_id: options[:apple_team_id],
+      apple_id: options[:apple_app_id],
+      itc_provider: ENV["sigh_#{options[:app_identifier]}_#{options[:match_type]}_team-id"],
+    )
   end
 
   lane :buildAndShip do
     running_on_ci = ENV["CI"] || false
+    build_only = true
     options = {
-      :build_only => true,
+      :build_for_development_only => BUILD_FOR_DEVELOPMENT_ONLY,
       :running_on_ci => running_on_ci,
       :git_branch_name => running_on_ci ? ENV['GIT_BRANCH_NAME'] : sh("git", "rev-parse", "--abbrev-ref", "HEAD"),
       :app_identifier => ENV["APP_IDENTIFIER"],
@@ -121,8 +123,15 @@ platform :ios do
       :apple_app_id => ENV["APPLE_APP_ID"],
     }
 
-    build_and_ship(options)
-
+    match_type = build(options)
+    unless build_only
+      ship(
+        apple_id: options[:apple_id],
+        apple_team_id: options[:apple_team_id],
+        apple_app_id: options[:apple_app_id],
+        match_type: match_type,
+      )
+    end
     commitAndPush(options)
   end
 end
