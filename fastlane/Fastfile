@@ -20,12 +20,8 @@ platform :ios do
       include: ["ios/Podfile.lock"],
     )
 
-    name = options[:branch_name]
-    puts "****************************************"
-    puts "1. #{name}"
-    puts "****************************************"
     push_to_git_remote(
-      local_branch: name,
+      local_branch: options[:branch_name],
     )
   end
 
@@ -134,14 +130,13 @@ platform :ios do
     #   build_only: true,
     # )
 
-    increment_build_number(
-      xcodeproj: XCODE_PROJECT,
-      build_number: 15,
-    )
-
     branch_name = running_on_ci ? ENV["GITHUB.HEAD_REF"] : sh("git", "rev-parse", "--abbrev-ref", "HEAD")
-    commitAndPush(
-      branch_name: branch_name,
-    )
+    puts "************************"
+    puts "#{branch_name}"
+    puts "************************"
+
+    # commitAndPush(
+    #   branch_name: branch_name,
+    # )
   end
 end
