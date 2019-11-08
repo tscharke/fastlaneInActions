@@ -56,7 +56,7 @@ platform :ios do
 
   end
 
-  private_lane :build_and_ship do | options |
+  private_lane :build do | options |
     build_for_development_only = options[:build_for_development_only]
     configuration_name = build_for_development_only ? "Development" : "Release"
     export_options_method = build_for_development_only ? "development" : "app-store"
