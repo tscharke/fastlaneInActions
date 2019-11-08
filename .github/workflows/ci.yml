@@ -18,9 +18,9 @@ jobs:
       - name: Install dependencies
         run: |
           yarn install
-      - name: Run tests
-        run: |
-          yarn test
+#      - name: Run tests
+#        run: |
+#          yarn test
       - name: Build and ship
         run: |
           yarn ios:buildAndShip
@@ -35,3 +35,4 @@ jobs:
           CI: true
           CI_KEYCHAIN_NAME: "CI_KEYCHAIN"
           CI_KEYCHAIN_PASSWORD: ${{ secrets.CI_KEYCHAIN_PASSWORD }}
+          BRANCH_NAME: ${GITHUB_REF}

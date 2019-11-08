@@ -139,7 +139,7 @@ platform :ios do
         )
 
     commitAndPush(
-      branch_name: running_on_ci ? ENV["GITHUB.REF"] : "xxx",
+      branch_name: running_on_ci ? ENV["BRANCH_NAME"] : "xxx",
     )
   end
 end
