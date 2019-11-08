@@ -6,24 +6,20 @@ XCODE_PROJECT = "./ios/#{PROJECT_NAME}.xcodeproj"
 XCODE_WORKSPACE = "./ios/#{PROJECT_NAME}.xcworkspace"
 OUTPUT_DIRECTORY = "./fastlane/builds/"
 BUILD_FOR_DEVELOPMENT_ONLY = false # true = Build for Development | false = Build to create a release
+BUILD_ONLY = true
 
 platform :ios do
   before_all do
-    # ensure_git_status_clean
+    ensure_git_status_clean
   end
 
   private_lane :commitAndPush do | options |
-    # commit_version_bump(
-    #   xcodeproj: XCODE_PROJECT,
-    #   include: ["ios/Podfile.lock"],
-    # )
+    commit_version_bump(
+      xcodeproj: XCODE_PROJECT,
+      include: ["ios/Podfile.lock"],
+    )
 
-    puts "************************************"
-    puts "#{options[:git_branch_name]}"
-    puts "************************************"
-
-    sh "git remote add origin https://#{ENV['GITHUB_TOKEN']}:github.com/tscharke/fastlaneInActions"
-    sh "git push origin #{options[:git_branch_name]}:#{options[:git_branch_name]} --tags"
+    push_to_git_remote
   end
 
   private_lane :certificates do | options |
@@ -115,15 +111,6 @@ platform :ios do
 
   lane :buildAndShip do
     running_on_ci = ENV["CI"] || false
-    git_branch_name = running_on_ci ? ENV['GIT_BRANCH_NAME'] : sh("git", "rev-parse", "--abbrev-ref", "HEAD")
-    commitAndPush(
-      git_branch_name: git_branch_name,
-    )
-  end
-
-  lane :buildAndShip1 do
-    running_on_ci = ENV["CI"] || false
-    build_only = true
     options = {
       :build_for_development_only => BUILD_FOR_DEVELOPMENT_ONLY,
       :running_on_ci => running_on_ci,
@@ -135,7 +122,7 @@ platform :ios do
     }
 
     match_type = build(options)
-    unless build_only
+    unless BUILD_ONLY
       ship(
         apple_id: options[:apple_id],
         apple_team_id: options[:apple_team_id],
