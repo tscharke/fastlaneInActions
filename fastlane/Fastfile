@@ -9,11 +9,9 @@ BUILD_FOR_DEVELOPMENT_ONLY = false # true = Build for Development | false = Buil
 
 platform :ios do
   before_all do
-    # ensure_git_status_clean
+    ensure_git_status_clean
   end
 
-  # Private lane with the following required `options`:
-  #   - branch_name
   private_lane :commitAndPush do | options |
     commit_version_bump(
       xcodeproj: XCODE_PROJECT,
@@ -21,18 +19,14 @@ platform :ios do
     )
 
     push_to_git_remote(
-      local_branch: options[:branch_name],
+      local_branch: options[:git_branch_name],
     )
   end
 
-  # Private lane with the following required `values`:
-  #   ci         = true | false
-  #   match_type = appstore | adhoc | development | enterprise
-  private_lane :certificates do | values |
-    ci = values[:ci]
-    match_type = values[:match_type]
+  private_lane :certificates do | options |
+    match_type = options[:match_type]
 
-    if ci
+    if options[:ci]
       create_keychain(
         name: ENV["CI_KEYCHAIN_NAME"],
         password: ENV["CI_KEYCHAIN_PASSWORD"],
@@ -62,23 +56,18 @@ platform :ios do
 
   end
 
-  # Private lane with the following required `values`:
-  #   ci         = true | false
-  #   build_only = true | false
-  private_lane :build_and_ship do | values |
-    # Set variables depending on the requirements
-    build_only = values[:build_only]
-    ci = values[:ci]
-    configuration_name = BUILD_FOR_DEVELOPMENT_ONLY ? "Development" : "Release"
-    export_options_method = BUILD_FOR_DEVELOPMENT_ONLY ? "development" : "app-store"
-    match_type = BUILD_FOR_DEVELOPMENT_ONLY ? "development" : "appstore"
+  private_lane :build_and_ship do | options |
+    build_only = options[:build_only]
+    running_on_ci = options[:running_on_ci]
+    configuration_name = build_only ? "Development" : "Release"
+    export_options_method = build_only ? "development" : "app-store"
+    match_type = build_only ? "development" : "appstore"
 
     certificates(
-      ci: ci,
+      ci: running_on_ci,
       match_type: match_type,
     )
 
-    # Install a required pod-files
     cocoapods(
       repo_update: true,
       podfile: "./ios/Podfile"
@@ -89,7 +78,6 @@ platform :ios do
       build_number: 15,
     )
 
-    # Build the project and store the results in the output folder
     gym(
       scheme: PROJECT_NAME,
       workspace: XCODE_WORKSPACE,
@@ -101,7 +89,7 @@ platform :ios do
       export_options: {
         method: export_options_method,
         provisioningProfiles: {
-          ENV["APP_IDENTIFIER"] => ENV["sigh_#{ENV["APP_IDENTIFIER"]}_#{match_type}_profile-name"],
+          options[:app_identifier] => ENV["sigh_#{options[:app_identifier]}_#{match_type}_profile-name"],
         }
       },
     )
@@ -113,33 +101,28 @@ platform :ios do
         verbose: false,
         uses_non_exempt_encryption: true,
         notify_external_testers: false,
-        username: ENV["APPLE_ID"],
-        team_id: ENV["APPLE_TEAM_ID"],
-        apple_id: ENV["APPLE_APP_ID"],
-        itc_provider: ENV["sigh_#{ENV["APP_IDENTIFIER"]}_#{match_type}_team-id"],
+        username: options[:apple_id],
+        team_id: options[:apple_team_id],
+        apple_id: options[:apple_app_id],
+        itc_provider: ENV["sigh_#{options[:app_identifier]}_#{match_type}_team-id"],
       )
     end
-
-    commitAndPush
   end
 
   lane :buildAndShip do
     running_on_ci = ENV["CI"] || false
     options = {
+      :build_only => true,
+      :running_on_ci => running_on_ci,
       :git_branch_name => running_on_ci ? ENV['GIT_BRANCH_NAME'] : sh("git", "rev-parse", "--abbrev-ref", "HEAD"),
+      :app_identifier => ENV["APP_IDENTIFIER"],
+      :apple_id => ENV["APPLE_ID"],
+      :apple_team_id => ENV["APPLE_TEAM_ID"],
+      :apple_app_id => ENV["APPLE_APP_ID"],
     }
 
-    # build_and_ship(
-    #   ci: ENV["CI"] || false,
-    #   build_only: true,
-    # )
+    build_and_ship(options)
 
-    puts "************************"
-    puts "xxxx: #{options[:git_branch_name]}"
-    puts "************************"
-
-    # commitAndPush(
-    #   branch_name: branch_name,
-    # )
+    commitAndPush(options)
   end
 end
