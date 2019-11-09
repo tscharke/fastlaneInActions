@@ -6,7 +6,7 @@ XCODE_PROJECT = "./ios/#{PROJECT_NAME}.xcodeproj"
 XCODE_WORKSPACE = "./ios/#{PROJECT_NAME}.xcworkspace"
 OUTPUT_DIRECTORY = "./fastlane/builds/"
 BUILD_FOR_DEVELOPMENT_ONLY = false # true = Build for Development | false = Build to create a release
-BUILD_ONLY = true
+BUILD_ONLY = false
 
 platform :ios do
   before_all do
