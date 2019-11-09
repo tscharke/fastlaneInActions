@@ -132,6 +132,6 @@ platform :ios do
         match_type: match_type,
       )
     end
-    commitAndPush(options)
+    # commitAndPush(options)
   end
 end
