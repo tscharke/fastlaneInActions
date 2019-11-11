@@ -33,7 +33,9 @@ jobs:
           GIT_BRANCH_NAME: ${{ github.ref }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - uses: fregante/setup-git-token@v1
-          with:
-            token: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
       - run: |
           git push origin ship-ios
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
