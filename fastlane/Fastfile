@@ -15,11 +15,11 @@ platform :ios do
 
   private_lane :pushChangesBack do | options |
     if options[:running_on_ci]
-      repository_uri = sh("git remote show origin | awk 'NR==2{print $3}' | sed 's/git@//g' | sed 's#https://##g'")
+      repository_uri = sh("git remote show origin | awk 'NR==2{print $3}' | sed 's/git@//g' | sed 's#https://##g'", log: false)
       push_uri = "https://x-access-token:#{options[:token]}@#{repository_uri.chomp}.git"
       branches = "HEAD:#{options[:git_branch_name]}"
 
-      sh("git push #{push_uri} #{branches} --tags")
+      sh("git push #{push_uri} #{branches} --tags", log: false)
     else
       push_to_git_remote
     end
@@ -113,7 +113,7 @@ platform :ios do
     options = {
       :build_for_development_only => BUILD_FOR_DEVELOPMENT_ONLY,
       :running_on_ci => running_on_ci,
-      :git_branch_name => running_on_ci ? "#{ENV['GIT_BRANCH_NAME']}"  : sh("git", "rev-parse", "--abbrev-ref", "HEAD"),
+      :git_branch_name => running_on_ci ? "#{ENV['GIT_BRANCH_NAME']}"  : sh("git", "rev-parse", "--abbrev-ref", "HEAD", log: false),
       :app_identifier => ENV["APP_IDENTIFIER"],
       :apple_id => ENV["APPLE_ID"],
       :apple_team_id => ENV["APPLE_TEAM_ID"],
