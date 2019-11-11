@@ -155,7 +155,7 @@ platform :ios do
 
 
     sh("git show-ref")
-    current_branch_name = sh("git rev-parse --abbrev-ref HEAD")
+    current_branch_name = ENV["GIT_BRANCH_NAME"] # sh("git rev-parse --abbrev-ref HEAD")
     current_branch = sh("git show-ref | grep #{current_branch_name} | awk '{print $2}'")
     repository_uri = sh("git remote show origin | awk 'NR==2{print $3}' | sed 's/git@//g' | sed 's#https://##g' ")
 
