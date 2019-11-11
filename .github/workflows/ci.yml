@@ -23,7 +23,6 @@ jobs:
           yarn test
       - name: Build and ship
         run: |
-#          yarn ios:buildAndShip
           fastlane ios myTest
         env:
           APP_IDENTIFIER: de.dermeer.van.fastlaneInActions
