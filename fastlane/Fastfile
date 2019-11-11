@@ -91,10 +91,6 @@ platform :ios do
       podfile: "./ios/Podfile"
     )
 
-    increment_build_number(
-      xcodeproj: XCODE_PROJECT,
-    )
-
     gym(
       scheme: PROJECT_NAME,
       workspace: XCODE_WORKSPACE,
@@ -128,19 +124,6 @@ platform :ios do
     )
   end
 
-  private_lane :myTest do | options |
-    increment_build_number(
-      xcodeproj: XCODE_PROJECT,
-      build_number: 23,
-    )
-    commit_version_bump(
-      xcodeproj: XCODE_PROJECT,
-      include: ["ios/Podfile.lock"],
-    )
-
-   sh("git push https://x-access-token:#{options[:token]}@github.com/tscharke/fastlaneInActions.git HEAD:#{options[:git_branch_name]} --tags")
-  end
-
   lane :buildAndShip do
     running_on_ci = ENV["CI"] || false
     options = {
@@ -154,17 +137,30 @@ platform :ios do
       :token => ENV["GITHUB_TOKEN"],
     }
 
-    myTest(options)
+    increment_build_number(
+      xcodeproj: XCODE_PROJECT,
+    )
 
-    # match_type = build(options)
-    # unless BUILD_ONLY
-    #   ship(
-    #     apple_id: options[:apple_id],
-    #     apple_team_id: options[:apple_team_id],
-    #     apple_app_id: options[:apple_app_id],
-    #     match_type: match_type,
-    #   )
-    # end
-    # commitAndPush(options)
+    match_type = build(options)
+
+    commit_version_bump(
+      xcodeproj: XCODE_PROJECT,
+      include: ["ios/Podfile.lock"],
+    )
+
+    if running_on_ci
+      sh("git push https://x-access-token:#{options[:token]}@github.com/tscharke/fastlaneInActions.git HEAD:#{options[:git_branch_name]} --tags")
+    else
+      push_to_git_remote
+    end
+
+    unless BUILD_ONLY
+      ship(
+        apple_id: options[:apple_id],
+        apple_team_id: options[:apple_team_id],
+        apple_app_id: options[:apple_app_id],
+        match_type: match_type,
+      )
+    end
   end
 end
