@@ -15,6 +15,22 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - uses: actions/checkout@v1
+      - run: yarn install
+      - run: yarn test
+
+    steps2:
+      - uses: actions/checkout@master
+      - uses: fregante/setup-git-token@v1
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        - run: git branch new-branch
+        - run: git push origin new-branch
+
+    stepsxx:
+      - uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - uses: actions/checkout@v1
       - name: Install dependencies
         run: |
           yarn install
