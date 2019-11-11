@@ -10,7 +10,7 @@ BUILD_ONLY = false
 
 platform :ios do
   before_all do
-    # ensure_git_status_clean
+    ensure_git_status_clean
   end
 
   private_lane :commitAndPush do | options |
@@ -19,15 +19,25 @@ platform :ios do
       include: ["ios/Podfile.lock"],
     )
 
-    # replace "remote origin"
-    repository_uri = sh("git remote show origin | awk 'NR==2{print $3}' | sed 's/git@//g'")
-    puts "Repo.-URI: #{repository_uri}"
-    puts "Branch: #{options[:git_branch_name]}"
-    sh("git", "remote", "set-url", "origin", "https://x-access-token:#{options[:token]}@#{repository_uri}")
+    if options[:running_on_ci]
+      current_branch_name = options[:git_branch_name].split("/")[-1]
+      current_branch = sh("git show-ref | grep #{current_branch_name} | awk '{print $2}'").split("\n")[-1]
+      repository_uri = sh("git remote show origin | awk 'NR==2{print $3}' | sed 's/git@//g' | sed 's#https://##g'")
 
-    push_to_git_remote(
-      local_branch: options[:git_branch_name],
-    )
+      puts "*************************************************"
+      puts "current_branch_name = #{current_branch_name}"
+      puts "current_branch      = #{current_branch}"
+      puts "repository_uri      = #{repository_uri}"
+      puts "*************************************************"
+
+      sh("git", "remote", "set-url", "origin", "https://x-access-token:#{options[:token]}@github.com/tscharke/fastlaneInActions.git")
+
+      push_to_git_remote(
+        local_branch: current_branch,
+      )
+    else
+      push_to_git_remote
+    end
   end
 
   private_lane :certificates do | options |
@@ -81,7 +91,6 @@ platform :ios do
 
     increment_build_number(
       xcodeproj: XCODE_PROJECT,
-      build_number: 17,
     )
 
     gym(
@@ -140,34 +149,5 @@ platform :ios do
       )
     end
     commitAndPush(options)
-  end
-
-  lane :myTest do | options |
-    given_branch_name = "refs/heads/ship-ios"
-    current_branch_name = given_branch_name.split("/")[-1] # ship-ios
-    current_branch = sh("git show-ref | grep #{current_branch_name} | awk '{print $2}' | sed ':a;N;$!ba;s/\n/+/g'").split("\n")[-1]
-    repository_uri = sh("git remote show origin | awk 'NR==2{print $3}' | sed 's/git@//g' | sed 's#https://##g' ")
-
-    increment_build_number(
-      xcodeproj: XCODE_PROJECT,
-      build_number: 18,
-    )
-
-    commit_version_bump(
-      xcodeproj: XCODE_PROJECT,
-      include: ["ios/Podfile.lock"],
-    )
-
-    puts "*************************************************"
-    puts "current_branch_name = #{current_branch_name}"
-    puts "current_branch      = #{current_branch}"
-    puts "repository_uri      = #{repository_uri}"
-    puts "*************************************************"
-
-    sh("git", "remote", "set-url", "origin", "https://x-access-token:#{ENV["GITHUB_TOKEN"]}@github.com/tscharke/fastlaneInActions.git")
-
-    push_to_git_remote(
-      local_branch: current_branch,
-    )
   end
 end
