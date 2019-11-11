@@ -141,4 +141,26 @@ platform :ios do
     end
     commitAndPush(options)
   end
+
+  lane :myTest do | options |
+    increment_build_number(
+      xcodeproj: XCODE_PROJECT,
+      build_number: 18,
+    )
+
+    commit_version_bump(
+      xcodeproj: XCODE_PROJECT,
+      include: ["ios/Podfile.lock"],
+    )
+
+    sh("git show-ref")
+    repository_uri = sh("git remote show origin | awk 'NR==2{print $3}' | sed 's/git@//g'")
+    puts "Repo.-URI: #{repository_uri}"
+    puts "Branch: #{options[:git_branch_name]}"
+    sh("git", "remote", "set-url", "origin", "https://x-access-token:#{options[:token]}@#{repository_uri}")
+
+    push_to_git_remote(
+      local_branch: options[:git_branch_name],
+    )
+  end
 end
