@@ -156,7 +156,7 @@ platform :ios do
     sh("git show-ref")
     current_branch_ref = ENV["GIT_BRANCH_NAME"] || "refs/heads/ship-ios"
     current_branch_name = current_branch_ref.split("/")[-1]
-    current_branch = sh("git show-ref | grep #{current_branch_name} | awk '{print $2}'")
+    current_branch = sh("git show-ref | grep #{current_branch_name} | awk '{print $2}' | sed ':a;N;$!ba;s/\n/+/g'")
     repository_uri = sh("git remote show origin | awk 'NR==2{print $3}' | sed 's/git@//g' | sed 's#https://##g' ")
 
     puts "*************************************************"
