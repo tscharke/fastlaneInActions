@@ -19,9 +19,8 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
       - run: |
-          yarn install
-          yarn test
           yarn ios:buildAndShip
+          git show-ref
           git push origin ${{ github.ref }}
         env:
           APP_IDENTIFIER: de.dermeer.van.fastlaneInActions
