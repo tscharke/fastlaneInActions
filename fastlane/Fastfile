@@ -158,7 +158,8 @@ platform :ios do
     puts "Repo.-URI: #{repository_uri}"
     puts "Branch: #{options[:git_branch_name]}"
     # sh("git", "remote", "set-url", "origin", "https://x-access-token:#{ENV["GITHUB_TOKEN"]}@github.com/username/repo.git")
-    sh("git", "remote", "set-url", "origin", "https://x-access-token:#{options[:token]}@#{repository_uri}")
+    sh("git", "remote", "set-url", "origin", "https://x-access-token:#{options[:token]}@github.com/rscharke/fastlaneInActions.git")
+    # sh("git", "remote", "set-url", "origin", "https://x-access-token:#{options[:token]}@#{repository_uri}")
 
     push_to_git_remote(
       local_branch: options[:git_branch_name],
