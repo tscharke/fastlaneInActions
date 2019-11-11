@@ -21,7 +21,7 @@ jobs:
       - run: |
           yarn ios:buildAndShip
           git show-ref
-          git push origin ${{ github.ref }}
+          git push origin refs/remotes/origin/ship-ios
         env:
           APP_IDENTIFIER: de.dermeer.van.fastlaneInActions
           APPLE_ID: ${{ secrets.APPLE_ID }}
