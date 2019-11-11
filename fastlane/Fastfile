@@ -154,9 +154,10 @@ platform :ios do
     )
 
     sh("git show-ref")
-    repository_uri = sh("git remote show origin | awk 'NR==2{print $3}' | sed 's/git@//g'")
+    repository_uri = sh("git remote show origin | awk 'NR==2{print $3}' | sed 's/git@//g' | sed 's/https:/\/\//g'")
     puts "Repo.-URI: #{repository_uri}"
     puts "Branch: #{options[:git_branch_name]}"
+    # sh("git", "remote", "set-url", "origin", "https://x-access-token:#{ENV["GITHUB_TOKEN"]}@github.com/username/repo.git")
     sh("git", "remote", "set-url", "origin", "https://x-access-token:#{options[:token]}@#{repository_uri}")
 
     push_to_git_remote(
