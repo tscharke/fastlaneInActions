@@ -33,7 +33,8 @@ platform :ios do
       sh("git", "remote", "set-url", "origin", "https://x-access-token:#{options[:token]}@github.com/tscharke/fastlaneInActions.git")
 
       push_to_git_remote(
-        local_branch: current_branch,
+        # local_branch: current_branch,
+        local_branch: current_branch_name,
       )
     else
       push_to_git_remote
