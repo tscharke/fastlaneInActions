@@ -41,3 +41,5 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
         - run: git push origin ${{ github.ref }}
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
