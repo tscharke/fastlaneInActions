@@ -10,7 +10,7 @@ BUILD_ONLY = false
 
 platform :ios do
   before_all do
-    ensure_git_status_clean
+    # ensure_git_status_clean
   end
 
   private_lane :commitAndPush do | options |
@@ -143,6 +143,11 @@ platform :ios do
   end
 
   lane :myTest do | options |
+    given_branch_name = "refs/heads/ship-ios"
+    current_branch_name = given_branch_name.split("/")[-1] # ship-ios
+    current_branch = sh("git show-ref | grep #{current_branch_name} | awk '{print $2}' | sed ':a;N;$!ba;s/\n/+/g'").split("\n")[-1]
+    repository_uri = sh("git remote show origin | awk 'NR==2{print $3}' | sed 's/git@//g' | sed 's#https://##g' ")
+
     increment_build_number(
       xcodeproj: XCODE_PROJECT,
       build_number: 18,
@@ -152,12 +157,6 @@ platform :ios do
       xcodeproj: XCODE_PROJECT,
       include: ["ios/Podfile.lock"],
     )
-
-    sh("git show-ref")
-    current_branch_ref = ENV["GIT_BRANCH_NAME"] || "refs/heads/ship-ios"
-    current_branch_name = current_branch_ref.split("/")[-1]
-    current_branch = sh("git show-ref | grep #{current_branch_name} | awk '{print $2}' | sed ':a;N;$!ba;s/\n/+/g'")
-    repository_uri = sh("git remote show origin | awk 'NR==2{print $3}' | sed 's/git@//g' | sed 's#https://##g' ")
 
     puts "*************************************************"
     puts "current_branch_name = #{current_branch_name}"
