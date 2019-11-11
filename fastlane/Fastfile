@@ -19,8 +19,13 @@ platform :ios do
       include: ["ios/Podfile.lock"],
     )
 
+    # replace "remote origin"
+    repository_uri = sh("git remote show origin | awk 'NR==2{print $3}' | sed 's/git@//g'")
+    puts "xxxxxxxxxx: #{repository_uri}"
+    sh("git", "remote", "set-url", "origin", "https://x-access-token:#{options[:token]}@#{repository_uri}")
+
     push_to_git_remote(
-      local_branch: options[:git_branch_name],
+      # local_branch: options[:git_branch_name],
     )
   end
 
@@ -121,6 +126,7 @@ platform :ios do
       :apple_id => ENV["APPLE_ID"],
       :apple_team_id => ENV["APPLE_TEAM_ID"],
       :apple_app_id => ENV["APPLE_APP_ID"],
+      :token => ENV["GITHUB_TOKEN"],
     }
 
     match_type = build(options)
@@ -132,6 +138,6 @@ platform :ios do
         match_type: match_type,
       )
     end
-    # commitAndPush(options)
+    commitAndPush(options)
   end
 end
