@@ -1,38 +1,116 @@
 {
-  "images" : [
+  "images": [
     {
-      "idiom" : "iphone",
-      "size" : "29x29",
-      "scale" : "2x"
+      "size": "1024x1024",
+      "idiom": "ios-marketing",
+      "filename": "MyAwesomeProject-1024x1024.png",
+      "scale": "1x"
     },
     {
-      "idiom" : "iphone",
-      "size" : "29x29",
-      "scale" : "3x"
+      "size": "60x60",
+      "idiom": "iphone",
+      "filename": "MyAwesomeProject-180x180.png",
+      "scale": "3x"
     },
     {
-      "idiom" : "iphone",
-      "size" : "40x40",
-      "scale" : "2x"
+      "size": "83.5x83.5",
+      "idiom": "ipad",
+      "filename": "MyAwesomeProject-167x167.png",
+      "scale": "2x"
     },
     {
-      "idiom" : "iphone",
-      "size" : "40x40",
-      "scale" : "3x"
+      "size": "76x76",
+      "idiom": "ipad",
+      "filename": "MyAwesomeProject-152x152.png",
+      "scale": "2x"
     },
     {
-      "idiom" : "iphone",
-      "size" : "60x60",
-      "scale" : "2x"
+      "size": "40x40",
+      "idiom": "iphone",
+      "filename": "MyAwesomeProject-120x120.png",
+      "scale": "3x"
     },
     {
-      "idiom" : "iphone",
-      "size" : "60x60",
-      "scale" : "3x"
+      "size": "60x60",
+      "idiom": "iphone",
+      "filename": "MyAwesomeProject-120x120.png",
+      "scale": "2x"
+    },
+    {
+      "size": "29x29",
+      "idiom": "iphone",
+      "filename": "MyAwesomeProject-87x87.png",
+      "scale": "3x"
+    },
+    {
+      "size": "40x40",
+      "idiom": "ipad",
+      "filename": "MyAwesomeProject-80x80.png",
+      "scale": "2x"
+    },
+    {
+      "size": "40x40",
+      "idiom": "iphone",
+      "filename": "MyAwesomeProject-80x80.png",
+      "scale": "2x"
+    },
+    {
+      "size": "76x76",
+      "idiom": "ipad",
+      "filename": "MyAwesomeProject-76x76.png",
+      "scale": "1x"
+    },
+    {
+      "size": "20x20",
+      "idiom": "iphone",
+      "filename": "MyAwesomeProject-60x60.png",
+      "scale": "3x"
+    },
+    {
+      "size": "29x29",
+      "idiom": "ipad",
+      "filename": "MyAwesomeProject-58x58.png",
+      "scale": "2x"
+    },
+    {
+      "size": "29x29",
+      "idiom": "iphone",
+      "filename": "MyAwesomeProject-58x58.png",
+      "scale": "2x"
+    },
+    {
+      "size": "40x40",
+      "idiom": "ipad",
+      "filename": "MyAwesomeProject-40x40.png",
+      "scale": "1x"
+    },
+    {
+      "size": "20x20",
+      "idiom": "iphone",
+      "filename": "MyAwesomeProject-40x40.png",
+      "scale": "2x"
+    },
+    {
+      "size": "20x20",
+      "idiom": "ipad",
+      "filename": "MyAwesomeProject-40x40.png",
+      "scale": "2x"
+    },
+    {
+      "size": "29x29",
+      "idiom": "ipad",
+      "filename": "MyAwesomeProject-29x29.png",
+      "scale": "1x"
+    },
+    {
+      "size": "20x20",
+      "idiom": "ipad",
+      "filename": "MyAwesomeProject-20x20.png",
+      "scale": "1x"
     }
   ],
-  "info" : {
-    "version" : 1,
-    "author" : "xcode"
+  "info": {
+    "version": 1,
+    "author": "fastlane"
   }
 }
