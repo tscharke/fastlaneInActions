@@ -153,9 +153,9 @@ platform :ios do
       include: ["ios/Podfile.lock"],
     )
 
-
     sh("git show-ref")
-    current_branch_name = ENV["GIT_BRANCH_NAME"] # sh("git rev-parse --abbrev-ref HEAD")
+    current_branch_ref = ENV["GIT_BRANCH_NAME"] # refs/heads/ship-ios
+    current_branch_name = sh("echo #{current_branch_ref} | awk '{index = split($0,result,"/"); print result[index]}'")
     current_branch = sh("git show-ref | grep #{current_branch_name} | awk '{print $2}'")
     repository_uri = sh("git remote show origin | awk 'NR==2{print $3}' | sed 's/git@//g' | sed 's#https://##g' ")
 
