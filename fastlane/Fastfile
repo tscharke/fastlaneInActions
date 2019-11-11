@@ -153,7 +153,7 @@ platform :ios do
       include: ["ios/Podfile.lock"],
     )
 
-    branch_name = ENV["GIT_BRANCH_NAME"]
+    branch_name = sh("git ls-remote --heads origin --no-merged")
     sh("git show-ref")
     repository_uri = sh("git remote show origin | awk 'NR==2{print $3}' | sed 's/git@//g' | sed 's#https://##g' ")
     puts "Repo.-URI: #{repository_uri}"
