@@ -130,7 +130,7 @@ platform :ios do
   private_lane :myTest do | options |
     increment_build_number(
       xcodeproj: XCODE_PROJECT,
-      build_number: 19,
+      build_number: 20,
     )
     commitAndPush(options)
   end
