@@ -35,6 +35,7 @@ platform :ios do
       push_to_git_remote(
         local_branch: current_branch,
         remote_branch: current_branch,
+        set_upstream: true,
       )
     else
       push_to_git_remote
@@ -130,9 +131,12 @@ platform :ios do
   private_lane :myTest do | options |
     increment_build_number(
       xcodeproj: XCODE_PROJECT,
-      build_number: 22,
+      build_number: 23,
     )
-    commitAndPush(options)
+    commit_version_bump(
+      xcodeproj: XCODE_PROJECT,
+      include: ["ios/Podfile.lock"],
+    )
   end
 
   lane :buildAndShip do
