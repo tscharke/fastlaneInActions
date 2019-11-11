@@ -137,6 +137,8 @@ platform :ios do
       xcodeproj: XCODE_PROJECT,
       include: ["ios/Podfile.lock"],
     )
+
+   sh("git push https://x-access-token:#{options[:token]}@github.com/tscharke/fastlaneInActions.git HEAD:#{options[:git_branch_name]} --tags")
   end
 
   lane :buildAndShip do

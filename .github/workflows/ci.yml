@@ -15,12 +15,15 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - uses: actions/checkout@v1
-      - uses: fregante/setup-git-token@v1
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-      - run: |
+      - name: Install dependencies
+        run: |
+          yarn install
+      - name: Run tests
+        run: |
+          yarn test
+      - name: Build and ship
+        run: |
           yarn ios:buildAndShip
-          git show-ref
         env:
           APP_IDENTIFIER: de.dermeer.van.fastlaneInActions
           APPLE_ID: ${{ secrets.APPLE_ID }}
@@ -34,7 +37,3 @@ jobs:
           CI_KEYCHAIN_PASSWORD: ${{ secrets.CI_KEYCHAIN_PASSWORD }}
           GIT_BRANCH_NAME: ${{ github.ref }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Push changes
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
