@@ -1,4 +1,4 @@
-package com.rndiffapp;
+package com.myawesomeproject;
 
 import android.app.Application;
 import android.content.Context;

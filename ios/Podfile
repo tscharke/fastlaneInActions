@@ -24,7 +24,7 @@ target 'MyAwesomeProject' do
 end
 
 target 'MyAwesomeProject-tvOS' do
-  # Pods for RnDiffApp-tvOS
+  # Pods for MyAwesomeProjectApp-tvOS
 
   target 'MyAwesomeProject-tvOSTests' do
     inherit! :search_paths
