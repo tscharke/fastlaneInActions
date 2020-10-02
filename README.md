@@ -33,6 +33,7 @@ I documented my way to get this goal here.
 - A machine with macOX >= 10.15.6
 - Xcode >= 12.0.1
 - Yarn >= 1.22.10
+- Node >= 12.16.0
 - The latest Xcode `command line tools` 👉 `xcode-select --install`
 - Cocoapods >= 1.9.3 👉 https://cocoapods.org
 - Global installed react-native-cli >= 2.0.1 👉`npm install -g react-native-cli`
