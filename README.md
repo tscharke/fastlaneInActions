@@ -10,29 +10,32 @@ I documented my way to get this goal here.
 
 # TOC
 
-- [Prerequisites](#Prerequisites)
-  - [Creating a certificate and identifier](#Creating-a-certificate-and-identifier)
-    - [Creating a profile with fastlane](#Creating-a-profile-with-fastlane)
-      - [Fastlane match](#Fastlane-match)
-      - [Create a certificate git repository](#Create-a-certificate-git-repository)
-        - [The URI to your certificate repository](#The-URI-to-your-certificate-repository)
-      - [Run match and create & store your certificates & provisioning profiles](#Run-match-and-create-&-store-your-certificates-&-provisioning-profiles)
-      - [Prepeare an App on Apple's Appstore-Connect](#Prepeare-an-App-on-Apple's-Appstore-Connect)
-- [Build and ship the React-Native-App on your machine](#Build-and-ship-the-React-Native-App-on-your-machine)
-  - [Create a dotfile with personal Apple-Account-Credentials](#Create-a-dotfile-with-personal-Apple-Account-Credentials)
-  - [Build app with fastlane](#Build-app-with-fastlane)
-- [Run the React-Native-App on your machine](#Run-the-React-Native-App-on-your-machine)
-- [Build the React-Native-App on GitHub](#Build-the-React-Native-App-on-GitHub)
-  - [Where is the magic](#Where-is-the-magic)
-  - [Using this with your own repository](#Using-this-with-your-own-repository)
-    - [Set some secrets on your repository](#Set-some-secrets-on-your-repository)
+- [TOC](#toc)
+- [Prerequisites](#prerequisites)
+  - [Creating a certificate and identifier](#creating-a-certificate-and-identifier)
+    - [Creating a profile with fastlane](#creating-a-profile-with-fastlane)
+      - [Fastlane match](#fastlane-match)
+      - [Create a certificate git repository](#create-a-certificate-git-repository)
+        - [The URI to your certificate repository](#the-uri-to-your-certificate-repository)
+      - [Run match and create & store your certificates & provisioning profiles](#run-match-and-create--store-your-certificates--provisioning-profiles)
+      - [Prepeare an App on Apple's Appstore-Connect](#prepeare-an-app-on-apples-appstore-connect)
+- [Build and ship the React-Native-App on your machine](#build-and-ship-the-react-native-app-on-your-machine)
+  - [Create a dotfile with personal Apple-Account-Credentials](#create-a-dotfile-with-personal-apple-account-credentials)
+  - [Build and ship app with fastlane](#build-and-ship-app-with-fastlane)
+- [Run the React-Native-App on your machine](#run-the-react-native-app-on-your-machine)
+- [Build and ship the React-Native-App on GitHub](#build-and-ship-the-react-native-app-on-github)
+  - [Where is the magic](#where-is-the-magic)
+  - [Using this with your own repository](#using-this-with-your-own-repository)
+    - [Set some secrets on your repository](#set-some-secrets-on-your-repository)
 
 # Prerequisites
 
-- A machine with macOX >= 10.14.6
-- Xcode >= 10.3
+- A machine with macOX >= 10.15.6
+- Xcode >= 12.0.1
+- Yarn >= 1.22.10
+- Node >= 12.16.0
 - The latest Xcode `command line tools` 👉 `xcode-select --install`
-- Cocoapods >= 1.7.1 👉 https://cocoapods.org
+- Cocoapods >= 1.9.3 👉 https://cocoapods.org
 - Global installed react-native-cli >= 2.0.1 👉`npm install -g react-native-cli`
 - Ruby >= 2.6.5
 - Fastlane >= 2.134
